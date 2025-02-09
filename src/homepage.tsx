@@ -30,11 +30,11 @@ const Homepage = () => {
             <div> 
             <span> {book}</span>
             <span> {chapter} </span>
-            <span>: {verse}</span>
+            <span> { ": " + verse}</span>
             </div>
-            <div>
-                <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition" onClick={create}> generate bible quote </button>
-                <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition" onClick={create}> generate bible quote </button>
+            <div className='container col-8 d-flex flex-column align-items-center'>
+                <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button>
+                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={create}>signup</button>
             </div>
         </div>
     );
