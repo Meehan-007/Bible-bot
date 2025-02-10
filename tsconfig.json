@@ -11,15 +11,19 @@
     // "disableReferencedProjectLoad": true,    
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
     "moduleResolution": "node",
-    
+
     /* Type Checking */
     "strict": true,          /* Reduce the number of projects loaded automatically by TypeScript. */
     "jsx": "react",   
     "module": "esnext",                
-    "skipLibCheck": true,                   /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+                      /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     /* Language and Environment */
     "target": "es2016",   
     "esModuleInterop": true, 
+    "outDir": "./dist", 
+     // Important for compatibility with CommonJS modules
+    "skipLibCheck": true,
+   
                                    /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
@@ -110,8 +114,16 @@
     // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
 
-    /* Completeness */
-    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+                         /* Skip type checking .d.ts files that are included with TypeScript. */
                                     /* Skip type checking all .d.ts files. */
-  }
+  }, 
+"type": "module", 
+  "include": [
+    "src/**/*.ts", // Includes all .ts files in the src directory and subdirectories
+    "src/*.ts",   // If user.ts and utils.ts are directly in src
+    "*.ts"        // Includes all .ts files in the project root
+, "user.js"],
+  "exclude": [
+    "node_modules"
+  ]
 }

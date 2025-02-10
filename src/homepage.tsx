@@ -8,9 +8,12 @@ const Homepage = () => {
     const [quote, setQuote] = useState(''); 
     const [book, setBook] = useState(''); 
     const [phone, setPhone] = useState(""); 
-console.log (phone)
+    const url = 'https://bible-api.com/data/web/random';
+
     const create = () => {
-        fetch('https://bible-api.com/data/web/random')
+
+        
+        fetch(url)
             .then(response => response.json()) 
             .then(data => {
                 console.log(data.random_verse.text, "new one", data);
@@ -29,14 +32,15 @@ console.log (phone)
       };
     
     const signup = () => {
+        const user = { phone, url };
         console.log("Phone number submitted:", phone);
-        fetch('https://localhost:3001/signup', 
+        fetch('http://localhost:3001/Meehan-007/Bible-bo/signup', 
         {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ phone }),
+            body: JSON.stringify({ user }),
         })
         
     }
