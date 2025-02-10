@@ -6,7 +6,9 @@ const Homepage = () => {
     const [verse, setVerse] = useState();
     const [chapter, setChapter] = useState();
     const [quote, setQuote] = useState(''); 
-    const [book, setBook] = useState('');
+    const [book, setBook] = useState(''); 
+    const [phone, setPhone] = useState(""); 
+console.log (phone)
     const create = () => {
         fetch('https://bible-api.com/data/web/random')
             .then(response => response.json()) 
@@ -22,6 +24,22 @@ const Homepage = () => {
             setBook(data.random_verse?.book || 'No book found');
         }) .catch(error => console.error(error)); 
     };
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPhone(e.target.value);
+      };
+    
+    const signup = () => {
+        console.log("Phone number submitted:", phone);
+        fetch('https://localhost:3001/signup', 
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ phone }),
+        })
+        
+    }
     
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100" style={{ textAlign: 'center', padding: '20px' }}>
@@ -33,8 +51,12 @@ const Homepage = () => {
             <span> { ": " + verse}</span>
             </div>
             <div className='container col-8 d-flex flex-column align-items-center'>
-                <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={create}>signup</button>
+                <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button> 
+                
+                    <input type="tel" placeholder="enter phone number" className="form-control mt-4 col-7" value={phone} onChange={handlePhoneChange}/>
+                    
+              
+                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={signup}>signup</button>
             </div>
         </div>
     );
