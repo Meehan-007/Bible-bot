@@ -120,7 +120,7 @@
     "src/**/*.ts", // Includes all .ts files in the src directory and subdirectories
     "src/*.ts",   // If user.ts and utils.ts are directly in src
     "*.ts"        // Includes all .ts files in the project root
-, "user.js"],
+, "user.js", "server.js"],
   "exclude": [
     "node_modules"
   ],

@@ -3,11 +3,13 @@ import './index.css';
 import "tailwindcss"; 
 
 const Homepage = () => {
-    const [verse, setVerse] = useState();
-    const [chapter, setChapter] = useState();
+    const [verse, setVerse] = useState('');
+    const [chapter, setChapter] = useState('');
     const [quote, setQuote] = useState(''); 
     const [book, setBook] = useState(''); 
-    const [phone, setPhone] = useState(); 
+    const [phone, setPhone] = useState(''); 
+    
+    console.log(phone, 'beginning')
     const create = () => {
         const url = 'https://bible-api.com/data/web/random';
         fetch(url)
@@ -25,11 +27,12 @@ const Homepage = () => {
         }) .catch(error => console.error(error)); 
     };
      const signup = () => { 
-      const url = 'https://bible-api.com/data/web/random';
-         const user = { phone, url };
-        console.log("Phone number submitted:", phone);
+        
+        const url = 'https://bible-api.com/data/web/random';
+         const user = { phone: phone, url: url };
+         
 
-         fetch('http://localhost:3001/Meehan-007/Bible-bo/signup', 
+         fetch('http://localhost:3001/signup', 
              {
                  method: 'POST',
                  headers: {
