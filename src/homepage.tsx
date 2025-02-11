@@ -6,9 +6,11 @@ const Homepage = () => {
     const [verse, setVerse] = useState();
     const [chapter, setChapter] = useState();
     const [quote, setQuote] = useState(''); 
-    const [book, setBook] = useState('');
+    const [book, setBook] = useState(''); 
+    const [phone, setPhone] = useState(); 
     const create = () => {
-        fetch('https://bible-api.com/data/web/random')
+        const url = 'https://bible-api.com/data/web/random';
+        fetch(url)
             .then(response => response.json()) 
             .then(data => {
                 console.log(data.random_verse.text, "new one", data);
@@ -22,7 +24,22 @@ const Homepage = () => {
             setBook(data.random_verse?.book || 'No book found');
         }) .catch(error => console.error(error)); 
     };
+     const signup = () => { 
+      const url = 'https://bible-api.com/data/web/random';
+         const user = { phone, url };
+        console.log("Phone number submitted:", phone);
+
+         fetch('http://localhost:3001/Meehan-007/Bible-bo/signup', 
+             {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json',
+                },
+                 body: JSON.stringify({ user }),
+             })
     
+         }
+     
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100" style={{ textAlign: 'center', padding: '20px' }}>
             <h1 className="text-3xl font-bold text-blue-600">Welcome to Bible Quotes</h1> 
@@ -34,10 +51,10 @@ const Homepage = () => {
             </div>
             <div className='container col-8 d-flex flex-column align-items-center'>
                 <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={create}>signup</button>
+                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={signup}>signup</button>
             </div>
         </div>
     );
-};
+}
 
 export default Homepage;

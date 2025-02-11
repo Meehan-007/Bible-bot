@@ -7,16 +7,20 @@
     "bootstrap": "^5.3.3",
     "cra-template-typescript": "1.2.0",
     "react": "^19.0.0",
+    "mongoose": "^8.10.0",
+    "nodemon": "^3.1.9",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "dotenv": "^16.4.7"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject", 
+    "dev": "nodemon server.js"
   },
   "eslintConfig": {
     "extends": [
@@ -41,7 +45,8 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@types/jest": "^29.5.14",
-    "@types/react": "^19.0.8",
+    "@types/react": "^19.0.8", 
+    "@types/mongoose": "^5.11.96",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.1",
