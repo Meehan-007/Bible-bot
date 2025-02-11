@@ -51,6 +51,7 @@ const Homepage = () => {
             </div>
             <div className='container col-8 d-flex flex-column align-items-center'>
                 <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button>
+                <input className="mt-4 px-4 py-2 bg-white col-7 border" placeholder="phone number" onChange={e => setPhone(e.target.value)} />
                 <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={signup}>signup</button>
             </div>
         </div>
