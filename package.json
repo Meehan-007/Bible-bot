@@ -2,10 +2,12 @@
   "name": "biblebot",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@tailwindcss/vite": "^4.0.5",
     "bootstrap": "^5.3.3",
     "cra-template-typescript": "1.2.0",
+    "dotenv": "^16.4.7",
     "mongoose": "^8.10.0",
     "nodemon": "^3.1.9",
     "react": "^19.0.0",
