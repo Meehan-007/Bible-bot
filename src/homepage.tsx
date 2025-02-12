@@ -9,7 +9,7 @@ const Homepage = () => {
     const [book, setBook] = useState(''); 
     const [phone, setPhone] = useState(''); 
     
-    console.log(phone, 'beginning')
+    
     const create = () => {
         const url = 'https://bible-api.com/data/web/random';
         fetch(url)
@@ -26,6 +26,31 @@ const Homepage = () => {
             setBook(data.random_verse?.book || 'No book found');
         }) .catch(error => console.error(error)); 
     };
+    const login = async () => {
+        console.log("phone", phone);
+        ;
+       
+        try {
+        const response = await fetch('http://localhost:3001/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ phone }),
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json(); // Try to get error details from server
+            throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Login successful:", data); 
+
+    } catch (error) {
+        console.error(error);
+    }
+    }
      const signup = () => { 
         
         const url = 'https://bible-api.com/data/web/random';
@@ -56,9 +81,11 @@ const Homepage = () => {
                 <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button>
                 <input className="mt-4 px-4 py-2 bg-white col-7 border" placeholder="phone number" onChange={e => setPhone(e.target.value)} />
                 <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={signup}>signup</button>
+                <input className="mt-4 px-4 py-2 bg-white col-7 border" placeholder="phone login" onChange={e => setPhone(e.target.value)}  />
+                <button className=" mt-4 px-4 py-2 b col-7" onClick={login}>Login</button>
             </div>
         </div>
     );
 }
 
-export default Homepage;
+export default Homepage
