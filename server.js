@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 let cronScheduleExpression = '0 9 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
-
+console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
 
@@ -55,7 +55,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
                 const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
 
                 console.log('Sending message to', recipient); // Log recipient
-
+                 console.log('Message:', fullMessage); // Log message
                 const message = await client.messages.create({
                     body: fullMessage,
                     from: '+18667943172',
@@ -80,6 +80,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
 // HTTP POST route for signup (separate from cron job)
 app.post('/signup', async (req, res) => {
     try {
+        console.log('Signup request:', req.body);
         const recipient = req.body.user.phone;
         const url = req.body.user.url;
 
@@ -98,10 +99,12 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, red) => {
+app.post('/login', async (req, res) => {
     try {
-        
-        const {phone} = req.body.phone;
+        console.log('Login request:', req.body);
+
+        const {phone} = req.body;
+        console.log('Phone:', phone);
         const user = await User.findOne({ phone });
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -115,6 +118,26 @@ app.post('/login', async (req, red) => {
     }
 })
 
+app.put('/login', async (req, res) => {
+    try {
+        console.log('Login request:', req.body);
+        const { phone, url } = req.body; 
+
+        const user = await User.findOne({ phone });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        user.url = url;
+        await user.save();
+
+        console.log('User updated successfully:', user);
+        res.status(200).json({ message: 'User updated successfully', user });
+    } catch (err) {
+        console.error('Error updating user:', err);
+        res.status(500).json({ error: 'Failed to update user', details: err.message });
+    }
+}
+)
         app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
         });
