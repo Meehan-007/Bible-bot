@@ -2,43 +2,46 @@
 import { useState } from "react";
 import Form from 'react-bootstrap/Form';
 
-const Login = (phone) => {
+const Login = ({phone}) => {
  
 
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
-    let url = 'https://bible-api.com/data/web/random';
-    
+    const [url, setUrl] = useState('https://bible-api.com/data/web/random');
+
   
 
     const handleCheckboxChange = (event) => {
         const targetId = event.target.id;
-        const isChecked = event.target.checked;
-
-        if (targetId === "total") {
-            setWholeBible(isChecked);
+       
+        if (targetId === "total") { 
+            setUrl('https://bible-api.com/data/web/random');
+            console.log("URL:", url);
+            setWholeBible(true)
+            console.log("wholeBible", wholeBible);
             setOT(false); // Uncheck other options
             setNT(false); // Uncheck other options
         } else if (targetId === "OT") {
-            setOT(isChecked);
+          
+            setUrl('https://bible-api.com/data/web/random/OT');
+            console.log("URL:", url);
             setWholeBible(false); // Uncheck other options
             setNT(false); // Uncheck other options
+             
         } else if (targetId === "NT") {
-            setNT(isChecked);
+            setUrl('https://bible-api.com/data/web/random/NT');
+            console.log("URL:", url);
+            setNT(true);
+            console.log("NT", NT);
             setWholeBible(false); // Uncheck other options
             setOT(false); // Uncheck other options
+            
         }
 
         // URL construction (example)
        
-        if (wholeBible) {
-            // No changes to URL for whole bible
-        } else if (OT) {
-            url += '/OT';
-        } else if (NT) {
-            url += '/NT';
-        }
+       
     }
         console.log("URL:", url);
        const login = async () => { 
@@ -56,14 +59,17 @@ const Login = (phone) => {
                 throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
             }
 
-            const data = await response.json();
+            const data = await response.json(); 
+            console.log("data", data);
+            console.log("phone", phone);
+            console.log("URL! for update", url);
             if (data) {
                 const response = await fetch('http://localhost:3001/login', {
                     method: 'UPDATE',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ phone, url }),
+                    body: JSON.stringify({ url }),
                 })
             }
 

@@ -81,14 +81,15 @@ let job = new CronJob(cronScheduleExpression, async function () {
 app.post('/signup', async (req, res) => {
     try {
         console.log('Signup request:', req.body);
-        const recipient = req.body.user.phone;
-        const url = req.body.user.url;
-
+        const recipient = req.body.phone;
+        const url = req.body.url;
+console.log('Recipient:', recipient);
+console.log('URL:', url);
         if (!recipient) {
             return res.status(400).json({ error: "Phone number is required" });
         }
 
-        const user = await User.create({ phone: recipient, url });
+        const user = await User.create({ phone: recipient, url: url });
 
         console.log('User saved successfully:', user);
         res.status(200).json({ message: 'User saved successfully', user });

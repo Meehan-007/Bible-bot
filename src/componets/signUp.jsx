@@ -1,45 +1,54 @@
-import { useState } from "react";
+
+
+import { useState, } from "react";
 import Form from 'react-bootstrap/Form';
 
 const SignUp = ({ phone }) => { 
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
-    let url = 'https://bible-api.com/data/web/random';
+    const [url, setUrl] = useState('');
 
     const handleCheckboxChange = (event) => {
+        console.log("event", event);
+        
         const targetId = event.target.id;
-        const isChecked = event.target.checked;
+        
 
-        if (targetId === "total") {
-            setWholeBible(isChecked);
+        if (targetId === "total") { 
+            setUrl('https://bible-api.com/data/web/random');
+            console.log("URL:", url);
+            setWholeBible(true)
+            console.log("wholeBible", wholeBible);
             setOT(false); // Uncheck other options
             setNT(false); // Uncheck other options
         } else if (targetId === "OT") {
-            setOT(isChecked);
+          
+            setUrl('https://bible-api.com/data/web/random/OT');
+            console.log("URL:", url);
             setWholeBible(false); // Uncheck other options
             setNT(false); // Uncheck other options
+             
         } else if (targetId === "NT") {
-            setNT(isChecked);
+            setUrl('https://bible-api.com/data/web/random/NT');
+            console.log("URL:", url);
+            setNT(true);
+            console.log("NT", NT);
             setWholeBible(false); // Uncheck other options
             setOT(false); // Uncheck other options
+            
         }
 
-        // URL construction (example)
+     
         
-        if (wholeBible) {
-            // No changes to URL for whole bible
-        } else if (OT) {
-            url += '/OT';
-        } else if (NT) {
-            url += '/NT';
-        }
-        console.log("URL:", url);
+        
+       
+        
     }
         const signup = async () => {
             console.log("phone", phone);
-            console.log("url", url);
-
+            console.log("URL!", url);
+              
             try {
                 const response = await fetch('http://localhost:3001/signup', {
                     method: 'POST',
