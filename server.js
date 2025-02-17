@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 12 * * 0-6'; // 7 AM every day
+let cronScheduleExpression = '0 13 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
@@ -91,7 +91,7 @@ console.log('URL:', url);
 
         const user = await User.create({ phone: recipient, url: url });
 
-        console.log('User saved successfully:', user);
+        console.log('User SAVED successfully:', user);
         res.status(200).json({ message: 'User saved successfully', user });
 
     } catch (err) {
@@ -100,34 +100,36 @@ console.log('URL:', url);
     }
 });
 
-app.post('/login', async (req, res) => {
-    try {
-        console.log('Login request:', req.body);
+// app.post('/login', async (req, res) => {
+//     try {
+//         console.log('Login request:', req.body);
 
-        const {phone} = req.body;
-        console.log('Phone:', phone);
-        const user = await User.findOne({ phone });
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
+//         const {phone} = req.body;
+//         console.log('Phone:', phone);
+//         const user = await User.findOne({ phone });
+//         if (!user) {
+//             return res.status(404).json({ error: 'User not found' });
+//         }
 
-        console.log('User found:', user); 
-        res.status(200).json({ message: 'User found', user });
-    } catch (err){
-        console.error('Error finding user:', err);
-        res.status(500).json({ error: 'Failed to find user', details: err.message });
-    }
-})
+//         console.log('User found:', user); 
+//         res.status(200).json({ message: 'User found', user });
+//     } catch (err){
+//         console.error('Error finding user:', err);
+//         res.status(500).json({ error: 'Failed to find user', details: err.message });
+//     }
+// })
 
 app.put('/login', async (req, res) => {
     try {
-        console.log('Login request:', req.body);
+        console.log('Login request: for the put', req.body);
         const { phone, url } = req.body; 
+        console.log('URL', url);
 
-        const user = await User.findOne({ phone });
+        const user = await User.findOneAndUpdate({ phone });
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
+        console.log('User found:', user.url);
         user.url = url;
         await user.save();
 

@@ -43,15 +43,51 @@ const Login = ({phone}) => {
        
        
     }
-        console.log("URL:::::", url);
-       const login = async () => { 
+    //    const login = async () => { 
+    //     try {
+    //         const response = await fetch('http://localhost:3001/login', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ phone }),
+    //         })
+
+    //         if (!response.ok) {
+    //             const errorData = await response.json(); // Try to get error details from server
+    //             throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
+    //         }
+
+    //         const data = await response.json(); 
+    //         console.log("data login", data);
+    //         console.log("phone login", phone);
+    //         console.log("URL! for update login", url);
+    //         if (data) {
+    //             const response = await fetch('http://localhost:3001/login', {
+    //                 method: 'UPDATE',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({ url }),
+    //             })
+    //         }
+
+    //         console.log("Login successful:", data);
+
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+        
+    // }
+
+    const update = async () => {
         try {
             const response = await fetch('http://localhost:3001/login', {
-                method: 'POST',
+                method: 'UPDATE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ phone }),
+                body: JSON.stringify({ url }),
             })
 
             if (!response.ok) {
@@ -59,26 +95,11 @@ const Login = ({phone}) => {
                 throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
             }
 
-            const data = await response.json(); 
-            console.log("data", data);
-            console.log("phone", phone);
-            console.log("URL! for update", url);
-            if (data) {
-                const response = await fetch('http://localhost:3001/login', {
-                    method: 'UPDATE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ url }),
-                })
-            }
-
-            console.log("Login successful:", data);
-
+            const data = await response.json();
+            
         } catch (error) {
             console.error(error);
         }
-        
     }
 
     const deleting = async () => {
@@ -105,7 +126,7 @@ const Login = ({phone}) => {
     }
     return (
         <div>
-            <Form onsubmit={login}>
+            <Form onsubmit={update}>
                 <Form.Group>
 
                     <div className="d-flex align-items-center">
@@ -149,8 +170,8 @@ const Login = ({phone}) => {
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
-                <button className=" mt-4 px-4 py-2 rg-primary text-white col-7" onClick={deleting}> delete </button>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={login}> update </button>
+                <button className=" mt-4 px-4 py-2 bg-danger text-white col-7" onClick={deleting}> unsucribe </button>
+                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={update}> update </button>
             </Form>
 
 
