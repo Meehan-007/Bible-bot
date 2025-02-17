@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 9 * * 0-6'; // 7 AM every day
+let cronScheduleExpression = '0 12 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
@@ -137,8 +137,26 @@ app.put('/login', async (req, res) => {
         console.error('Error updating user:', err);
         res.status(500).json({ error: 'Failed to update user', details: err.message });
     }
-}
-)
+})
+app.delete('/login', async (req, res) => {
+    try {
+        console.log('delete:', req.body);
+        const { phone } = req.body;
+        console.log('Phone:', phone);
+       const deletedUser = await User.findOneAndDelete({ phone})
+        if (!deletedUser) {
+            res.status(404).json({ message: 'No user found'});
+            return;
+        };
+        res.json(deletedUser);
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        res.status(500).json({ error: 'Failed to delete user', details: err.message });
+    }
+        
+
+    
+})
         app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
         });

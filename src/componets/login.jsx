@@ -43,7 +43,7 @@ const Login = ({phone}) => {
        
        
     }
-        console.log("URL:", url);
+        console.log("URL:::::", url);
        const login = async () => { 
         try {
             const response = await fetch('http://localhost:3001/login', {
@@ -79,8 +79,29 @@ const Login = ({phone}) => {
             console.error(error);
         }
         
-        
+    }
 
+    const deleting = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/login', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phone }),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json(); // Try to get error details from server
+                throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log("data", data);
+            
+        } catch (error) {
+            console.error(error);
+        }
     }
     return (
         <div>
@@ -128,6 +149,7 @@ const Login = ({phone}) => {
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
+                <button className=" mt-4 px-4 py-2 rg-primary text-white col-7" onClick={deleting}> delete </button>
                 <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={login}> update </button>
             </Form>
 
