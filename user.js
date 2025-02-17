@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 const { Schema, model, } = require('mongoose');
 
+=======
+import mongoose from 'mongoose'
+const { Schema, model } = mongoose
+>>>>>>> signin
 
 
 const userSchema = new Schema({
@@ -19,4 +24,8 @@ const userSchema = new Schema({
 
 const User = model('User', userSchema);
 
+<<<<<<< HEAD
 module.exports = User;
+=======
+export { User }
+>>>>>>> signin
