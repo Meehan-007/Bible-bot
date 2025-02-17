@@ -81,9 +81,11 @@ const Login = ({phone}) => {
     // }
 
     const update = async () => {
+        console.log("phone login~!!!!!!!!!!!!!", phone);
+        console.log("URL! for update login", url);
         try {
             const response = await fetch('http://localhost:3001/login', {
-                method: 'UPDATE',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -96,6 +98,7 @@ const Login = ({phone}) => {
             }
 
             const data = await response.json();
+            console.log("data", data);
             
         } catch (error) {
             console.error(error);
@@ -170,7 +173,7 @@ const Login = ({phone}) => {
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
-                <button className=" mt-4 px-4 py-2 bg-danger text-white col-7" onClick={deleting}> unsucribe </button>
+                <button className=" mt-4 px-4 py-2 bg-danger text-white col-7" onClick={deleting}> unsubscribe </button>
                 <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={update}> update </button>
             </Form>
 

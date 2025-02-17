@@ -8,11 +8,9 @@
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "cra-template-typescript": "1.2.0",
-<<<<<<< HEAD
-=======
     "cron": "^3.5.0",
->>>>>>> signin
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "mongoose": "^8.10.0",
     "nodemon": "^3.1.9",
     "react": "^19.0.0",
@@ -27,11 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-<<<<<<< HEAD
-    "dev": "nodemon server.js"
-=======
     "dev": " nodemon server.js"
->>>>>>> signin
   },
   "eslintConfig": {
     "extends": [
@@ -61,24 +55,7 @@
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.1",
-<<<<<<< HEAD
-    "tailwindcss": "^4.0.5"
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Meehan-007/Bible-bot.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Meehan-007/Bible-bot/issues"
-  },
-  "homepage": "https://github.com/Meehan-007/Bible-bot#readme"
-=======
     "tailwindcss": "^4.0.5",
     "ts-node": "^10.9.2"
   }
->>>>>>> signin
 }
