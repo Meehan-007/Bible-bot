@@ -173,8 +173,8 @@ const Login = ({phone}) => {
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
-                <button className=" mt-4 px-4 py-2 bg-danger text-white col-7" onClick={deleting}> unsubscribe </button>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={update}> update </button>
+                <button className=" mt-4 px-4 py-2 bg-danger text-white col-12" onClick={deleting}> unsubscribe </button>
+                <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={update}> update </button>
             </Form>
 
 

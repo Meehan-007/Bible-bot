@@ -46,9 +46,10 @@ const SignUp = ({ phone }) => {
         
     }
         const signup = async () => {
-            console.log("phone", phone);
+            
             console.log("URL!", url);
-              
+            phone = `+1${phone}`;
+              console.log("phone", phone);
             try {
                 const response = await fetch('http://localhost:3001/signup', {
                     method: 'POST',
@@ -116,7 +117,7 @@ const SignUp = ({ phone }) => {
                             <Form.Label className="text-center label"> new testament only </Form.Label>
                         </div>
                     </Form.Group>
-                    <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={signup}> create account </button>
+                    <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={signup}> create account </button>
                 </Form>
 
 

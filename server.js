@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import cron from 'cron';
 import {User} from './user.js'
-
+import api from './api.js';
 
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(api);
 const port = process.env.PORT || 3001;
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -30,7 +30,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 13 * * 0-6'; // 7 AM every day
+let cronScheduleExpression = '0 15 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
@@ -40,6 +40,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
         const users = await User.find({}); // Get all users from the database
                console.log('Users:', users);
         const messagePromises = users.map(async (user) => {
+            console.log('checking laps', user);
             const recipient = user.phone;
             const url = user.url;
 
@@ -61,17 +62,25 @@ let job = new CronJob(cronScheduleExpression, async function () {
                     body: fullMessage,
                     from: '+18667943172',
                     to: recipient
-                });
+                })
+                return { recipient, success: true, sid: message.sid }
 
-                console.log('Message sent successfully to', recipient, message.sid);
+                
 
             } catch (innerError) {
                 console.error(`Error sending message to ${recipient}:`, innerError);
+                return { recipient, success: false, error: innerError.message };
                 // Handle error for individual users here.  You might want to log it or store it in the database.
             }
         })
         const results = await Promise.all(messagePromises);
         console.log("Message sending results:", results);
+        const successfulSends = results.filter(result => result && result.success); // Filter for successful sends
+const failedSends = results.filter(result => result && !result.success); // Filter for failed sends
+
+console.log("Successful sends:", successfulSends);
+console.log("Failed sends:", failedSends);
+
     } catch (error) {
         console.error("Error in cron job:", error);
     }
@@ -101,24 +110,7 @@ console.log('URL:', url);
     }
 });
 
-// app.post('/login', async (req, res) => {
-//     try {
-//         console.log('Login request:', req.body);
 
-//         const {phone} = req.body;
-//         console.log('Phone:', phone);
-//         const user = await User.findOne({ phone });
-//         if (!user) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         console.log('User found:', user); 
-//         res.status(200).json({ message: 'User found', user });
-//     } catch (err){
-//         console.error('Error finding user:', err);
-//         res.status(500).json({ error: 'Failed to find user', details: err.message });
-//     }
-// })
 
 app.put('/login', async (req, res) => {
     try {
