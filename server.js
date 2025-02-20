@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import cron from 'cron';
 import {User} from './user.js'
-import api from './api.js';
+// import api from './api/bibleVerse.js';
 
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(api);
+ //app.use("/api", api);
 const port = process.env.PORT || 3001;
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -30,7 +30,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 15 * * 0-6'; // 7 AM every day
+let cronScheduleExpression = '0 16 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
@@ -73,13 +73,13 @@ let job = new CronJob(cronScheduleExpression, async function () {
                 // Handle error for individual users here.  You might want to log it or store it in the database.
             }
         })
-        const results = await Promise.all(messagePromises);
-        console.log("Message sending results:", results);
-        const successfulSends = results.filter(result => result && result.success); // Filter for successful sends
-const failedSends = results.filter(result => result && !result.success); // Filter for failed sends
+        // const results = await Promise.all(messagePromises);
+//         // console.log("Message sending results:", results);
+//         const successfulSends = results.filter(result => result && result.success); // Filter for successful sends
+// const failedSends = results.filter(result => result && !result.success); // Filter for failed sends
 
-console.log("Successful sends:", successfulSends);
-console.log("Failed sends:", failedSends);
+// console.log("Successful sends:", successfulSends);
+// console.log("Failed sends:", failedSends);
 
     } catch (error) {
         console.error("Error in cron job:", error);
