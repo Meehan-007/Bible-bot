@@ -7,6 +7,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import cron from 'cron';
 import {User} from './user.js'
+import router from './api/bibleVerse.js'; 
+import sequelize from './config/connection.js'
 // import api from './api/bibleVerse.js';
 
 
@@ -18,6 +20,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api', router);
  //app.use("/api", api);
 const port = process.env.PORT || 3001;
 
