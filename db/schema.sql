@@ -1,0 +1,5 @@
+
+DROP DATABASE IF EXISTS bible
+
+CREATE DATABASE bible
+
