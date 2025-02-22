@@ -1,208 +1,53 @@
-const chronicles = require('./1chronicles.json');
-const corinthians = require('./1corinthians.json');
-const john = require('./1john.json');
-const kings = require('./1kings.json');
-const peter = require('./1peter.json');
-const samuel = require('./1samuel.json');
-const thessalonians = require('./1thessalonians.json');
-const timothy = require('./1timothy.json');
-const chronicles2 = require('./2chronicles.json');
-const corinthians2 = require('./2corinthians.json');
-const john2 = require('./2john.json');
-const kings2 = require('./2kings.json');
-const peter2 = require('./2peter.json');
-const samuel2 = require('./2samuel.json');
-const thessalonians2 = require('./2thessalonians.json');
-const timothy2 = require('./2timothy.json');
-const acts = require('./acts.json');
-const amos = require('./amos.json');
-const colossians = require('./colossians.json');
-const daniel = require('./daniel.json');
-const deuteronomy = require('./deuteronomy.json');
-const ecclesiastes = require('./ecclesiastes.json');
-const ephesians = require('./ephesians.json');
-const esther = require('./esther.json');
-const exodus = require('./exodus.json');
-const ezekiel = require('./ezekiel.json');
-const ezra = require('./ezra.json');
-const galatians = require('./galatians.json');
-const genesis = require('./genesis.json');
-const habakkuk = require('./habakkuk.json');
-const haggai = require('./haggai.json');
-const hebrews = require('./hebrews.json');
-const hosea = require('./hosea.json');
-const isaiah = require('./isaiah.json');
-const james = require('./james.json');
-const jeremiah = require('./jeremiah.json');
-const job = require('./job.json');
-const joel = require('./joel.json');
-const john3 = require('./3john.json');
-const jonah = require('./jonah.json');
-const joshua = require('./joshua.json');
-const jude = require('./jude.json');
-const judges = require('./judges.json');
-const lamentations = require('./lamentations.json');
-const leviticus = require('./leviticus.json');
-const luke = require('./luke.json');
-const malachi = require('./malachi.json');
-const mark = require('./mark.json');
-const matthew = require('./matthew.json');
-const micah = require('./micah.json');
-const nahum = require('./nahum.json');
-const nehemiah = require('./nehemiah.json');
-const numbers = require('./numbers.json');
-const obadiah = require('./obadiah.json');
-const philemon = require('./philemon.json');
-const philippians = require('./philippians.json');
-const proverbs = require('./proverbs.json');
-const psalms = require('./psalms.json');
-const revelation = require('./revelation.json');
-const romans = require('./romans.json');
-const ruth = require('./ruth.json');
-const songofsolomon = require('./songofsolomon.json');
-const titus = require('./titus.json');
-const zechariah = require('./zechariah.json');
-const zephaniah = require('./zephaniah.json');
+// require('dotenv').config(); // Load environment variables
+import fs from 'fs';
+import path from 'path';
+// import {book} from '../models/book.js';  // Path to your Sequelize models
+import Sequelize from 'sequelize'; // Path to your db connection
 
+async function seedDatabase() {
+    try {
+        const jsonDir = path.join(__dirname, './json'); // Path to your JSON files
+        const bookData = {};
 
-const sequelize = require('../config/connection');
+        const files = fs.readdirSync(jsonDir);
 
-const seedAll = async () => {
-  await sequelize.sync({ force: true });
-  console.log('\n----- DATABASE SYNCED -----\n');
-  await chronicles();
-  console.log('\n----- Chronicles SEEDED -----\n');
- 
-    await corinthians();
-    console.log('\n----- Corinthians SEEDED -----\n');
-   await john();
-    console.log('\n----- John SEEDED -----\n');
-    await kings();
-    console.log('\n----- Kings SEEDED -----\n');
-    await peter();
-    console.log('\n----- Peter SEED -----\n');
-    await samuel();
-    console.log('\n----- Samuel SEEDED -----\n');
-   
-    await thessalonians();
-    console.log('\n----- Thessalonians SEEDED -----\n');
-    await timothy();
-    await chronicles2();
-    console.log('\n----- Chronicles SEEDED -----\n');
-    await corinthians2();
-    console.log('\n----- Corinthians SEEDED -----\n');
-    await john2();
+        for (const file of files) {
+            if (path.extname(file) === '.json') {
+                const bookName = path.basename(file, '.json');
+                const filePath = path.join(jsonDir, file);
+                const fileContents = fs.readFileSync(filePath, 'utf8');
+                bookData[bookName] = JSON.parse(fileContents);
+            }
+        }
 
-    console.log('\n----- John SEEDED -----\n');
-    await kings2();
+        await Sequelize.sync({ force: false }); // Sync database (use force: false in production)
 
-    console.log('\n----- Kings SEEDED -----\n');
-    await peter2();
+        // Seed the database:
+        for (const book in bookData) {
+            const chapters = bookData[book];
+            const createdBook = await Book.create({ name: book });
 
-    console.log('\n----- Peter SEED -----\n');
-    await samuel2();
-     
-    console.log('\n----- Samuel SEEDED -----\n');
-    await thessalonians2();
-    console.log('\n----- Thessalonians SEEDED -----\n');
-    await timothy2();
+            for (const chapterNumber in chapters) {
+                const verses = chapters[chapterNumber];
+                const createdChapter = await Chapter.create({
+                    bookId: createdBook.id,
+                    number: chapterNumber
+                });
 
-    console.log('\n----- Timothy SEEDED -----\n');
-    await acts();
-    console.log('\n----- Acts SEEDED -----\n');
-    await amos();
-    console.log('\n----- Amos SEEDED -----\n');
-    await colossians();
-    console.log('\n----- Colossians SEEDED -----\n');
-    await daniel();
-    console.log('\n----- Daniel SEEDED -----\n');
-    await deuteronomy();
-    console.log('\n----- Deuteronomy SEEDED -----\n');
-    await ecclesiastes();
-    console.log('\n----- Ecclesiastes SEEDED -----\n');
-    await ephesians();
-    console.log('\n----- Ephesians SEEDED -----\n');
-    await esther();
-    await exodus();
-    console.log('\n----- Exodus SEEDED -----\n');
-    await ezekiel();
-    console.log('\n----- Ezekiel SEEDED -----\n');
-    await ezra();
-    console.log('\n----- Ezra SEEDED -----\n');
-    await galatians();
-    console.log('\n----- Galatians SEEDED -----\n');
-    await genesis();
-    console.log('\n----- Genesis SEEDED -----\n');
-    await habakkuk();
-    console.log('\n----- Habakkuk SEEDED -----\n');
-    await haggai();
-    console.log('\n----- Haggai SEEDED -----\n');
-    await hebrews();
-    console.log('\n----- Hebrews SEEDED -----\n');
-    await hosea();
-    console.log('\n----- Hosea SEEDED -----\n');
-    await isaiah();
-    console.log('\n----- Isaiah SEEDED -----\n');
-    await james();
-    console.log('\n----- James SEEDED -----\n');
-    await jeremiah();
-    console.log('\n----- Jeremiah SEEDED -----\n');
-    await job();
-    console.log('\n----- Job SEEDED -----\n');
-    await joel();
-    console.log('\n----- Joel SEEDED -----\n');
-    await john3();
-    console.log('\n----- John SEEDED -----\n');
-    await jonah();
-    
-    await joshua();
-    
-    await jude();
-    console.log('\n----- Jude SEEDED -----\n');
-    await judges();
-    console.log('\n----- Judges SEEDED -----\n');
-    await lamentations();
-    console.log('\n----- Lamentations SEEDED -----\n');
-    await leviticus();
-    console.log('\n----- Leviticus SEEDED -----\n');
-    await luke();
-    console.log('\n----- Luke SEEDED -----\n');
-    await malachi();
-    console.log('\n----- Malachi SEEDED -----\n');
-    await mark();
-    console.log('\n----- Mark SEEDED -----\n');
-    await matthew();
-    console.log('\n----- Matthew SEEDED -----\n');
-    await micah();
-    console.log('\n----- Micah SEEDED -----\n');
-    await nahum();
-    console.log('\n----- Nahum SEEDED -----\n');
-    await nehemiah();
-    console.log('\n----- Nehemiah SEEDED -----\n');
-    await numbers();
-    console.log('\n----- Numbers SEEDED -----\n');
-    await obadiah();
-    console.log('\n----- Obadiah SEEDED -----\n');
-    await philemon();
-    console.log('\n----- Philemon SEEDED -----\n');
-    await philippians();
-    console.log('\n----- Philippians SEEDED -----\n');
-    await proverbs();
-    console.log('\n----- Proverbs SEEDED -----\n');
-    await psalms();
-    console.log('\n----- Psalms SEEDED -----\n');
-    await revelation();
-    console.log('\n----- Revelation SEEDED -----\n');
-    await romans();
-    console.log('\n----- Romans SEEDED -----\n');
-    await ruth();
-    await songofsolomon();
-    await titus();
-    await zechariah();
-    await zephaniah();
+                for (const verseText of verses) {
+                    await Verse.create({
+                        chapterId: createdChapter.id,
+                        text: verseText
+                    });
+                }
+            }
+        }
 
+        console.log('Database seeded successfully!');
 
-  process.exit(0);
-};
+    } catch (error) {
+        console.error('Error seeding database:', error);
+    }
+}
 
-seedAll();
+seedDatabase();
