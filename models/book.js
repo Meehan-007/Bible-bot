@@ -1,12 +1,12 @@
-const { Model, DataTypes } = require('sequelize');
+import { Model, DataTypes } from 'sequelize';
 
-const sequelize = require('../config/connection.js');
+import sequelize from '../config/connection.js';
 
-class Book extends Model {
+class book extends Model {
 
 }
 
-Book.init(
+book.init(
     {
         book: {
             type: DataTypes.STRING,
@@ -41,4 +41,4 @@ Book.init(
         modelName: 'book'
     }
 );
-module.exports = Book;
+export default book;

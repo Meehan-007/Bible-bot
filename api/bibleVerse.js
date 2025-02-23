@@ -4,49 +4,39 @@ const router = express.Router();
 router.get("/random/:book", async (req, res) => {
     try {
         const { book } = req.params;
-        const bookData = books[book.toLowerCase()]; // Case-insensitive lookup
+        console.log("book name", book);
+        const results = await '../seed/' + book + '.json';
+        console.log("results", results);
 
-        if (!bookData) {
-            return res.status(404).json({ error: "Book not found." });
+        let maxChapter = -Infinity;
+        let maxVerse = -Infinity;
+
+       for(const chapter in results){
+        console.log("chapter", chapter);
+           if(chapter > maxChapter){
+               maxChapter = chapter;
+               console.log("maxChapter", maxChapter);
+               console.log("chapter2", chapter);
+           }
         }
+          const chapterSelection = Math.floor(Math.random() * maxChapter);
+           console.log("maxChapter2", maxChapter);
+           console.log("chapterSelection", chapterSelection);
+           for(const verse in results[chapterSelection]){
+               if(verse > maxVerse){
+                   maxVerse = verse;
+               }
+           }
+          const verseSelection = Math.floor(Math.random() * maxVerse);
+           console.log("maxVerse", maxVerse);
 
-        // Get all chapter numbers.  Assumes your JSON is structured with chapters as keys.
-        const chapterNumbers = Object.keys(bookData);
+           const finalVerse = results[chapterSelection][verseSelection];
+           console.log("finalVerse", finalVerse);
 
-        if (chapterNumbers.length === 0) {
-            return res.status(404).json({ error: "No chapters found in this book." });
-        }
-
-        const randomChapter = chapterNumbers[Math.floor(Math.random() * chapterNumbers.length)];
-        const chapterVerses = bookData[randomChapter]; // Get the verses for the random chapter
-
-        if (!chapterVerses || chapterVerses.length === 0) {
-            return res.status(404).json({ error: "No verses found in this chapter." });
-        }
-
-        const numVersesToReturn = Math.floor(Math.random() * 4) + 3; // 3 to 10 verses
-        const randomVerses = [];
-
-        //Efficiently get random verses without duplicates
-        const indices = new Set();
-        while (indices.size < Math.min(numVersesToReturn, chapterVerses.length)){
-            indices.add(Math.floor(Math.random() * chapterVerses.length));
-        }
-
-        for (const index of indices){
-            randomVerses.push(chapterVerses[index]);
-        }
-
-
-        res.json({
-            book,
-            chapter: randomChapter,
-            verses: randomVerses
-        });
-
-    } catch (error) {
-        console.error(error); // Log the error for debugging
-        res.status(500).json({ error: "Server error" });
+       
+} catch (err) {
+        console.error("Error getting random verse:", err);
+        res.status(500).json({ error: "Failed to get random verse", details: err.message });
     }
 });
 
