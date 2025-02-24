@@ -1,40 +1,42 @@
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const router = express.Router();
 
 router.get("/random/:book", async (req, res) => {
     try {
         const { book } = req.params;
         console.log("book name", book);
-        const results = await '../seed/' + book + '.json';
-        console.log("results", results);
-
-        let maxChapter = -Infinity;
-        let maxVerse = -Infinity;
-
-       for(const chapter in results){
-        console.log("chapter", chapter);
-           if(chapter > maxChapter){
-               maxChapter = chapter;
-               console.log("maxChapter", maxChapter);
-               console.log("chapter2", chapter);
-           }
+        if (!book) {
+            return res.status(400).json({ error: "Book parameter is required" });
         }
-          const chapterSelection = Math.floor(Math.random() * maxChapter);
-           console.log("maxChapter2", maxChapter);
-           console.log("chapterSelection", chapterSelection);
-           for(const verse in results[chapterSelection]){
-               if(verse > maxVerse){
-                   maxVerse = verse;
-               }
-           }
-          const verseSelection = Math.floor(Math.random() * maxVerse);
-           console.log("maxVerse", maxVerse);
+        const filePath = path.join(__dirname, '../seed', `${book}.json`);
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        const results = JSON.parse(fileContent);
+        
 
-           const finalVerse = results[chapterSelection][verseSelection];
-           console.log("finalVerse", finalVerse);
-
-       
-} catch (err) {
+        var key = Math.floor(Math.random( ) * results.length); 
+        if (key > results.length - 6) {
+            key = results.length - 6;
+        }
+        let final = [];
+        for(var i = key; i < key + 6; i++) {
+           
+            
+            
+                console.log(results[i]);
+                final.push(results[i]);
+               
+        }
+        res.json({ final });
+        
+    }
+        
+        
+ catch (err) {
         console.error("Error getting random verse:", err);
         res.status(500).json({ error: "Failed to get random verse", details: err.message });
     }
