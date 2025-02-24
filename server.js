@@ -6,10 +6,10 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import cron from 'cron';
-import {User} from './user.js'
+import {User} from './models/user.js'
 import router from './api/bibleVerse.js'; 
-import sequelize from './config/connection.js'
-// import api from './api/bibleVerse.js';
+
+
 
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 16 * * 0-6'; // 7 AM every day
+let cronScheduleExpression = '0 15 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
@@ -46,6 +46,8 @@ let job = new CronJob(cronScheduleExpression, async function () {
             console.log('checking laps', user);
             const recipient = user.phone;
             const url = user.url;
+            const fullMessage = user.fullMessage
+            
 
             try {
                 const response = await fetch(url);
@@ -53,12 +55,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
                     throw new Error(`API error: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
-                const textmessage = data.random_verse.text;
-                const verse = data.random_verse.verse;
-                const chapter = data.random_verse.chapter;
-                const book = data.random_verse.book;
-                const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
-
+                
                 console.log('Sending message to', recipient); // Log recipient
                  console.log('Message:', fullMessage); // Log message
                 const message = await client.messages.create({
@@ -96,13 +93,16 @@ app.post('/signup', async (req, res) => {
         console.log('Signup request:', req.body);
         const recipient = req.body.phone;
         const url = req.body.url;
+        const fulllMessage = req.body.fullMessage;
 console.log('Recipient:', recipient);
 console.log('URL:', url);
         if (!recipient) {
             return res.status(400).json({ error: "Phone number is required" });
         }
+        
 
-        const user = await User.create({ phone: recipient, url: url });
+           console.log('Full message:', fulllMessage);
+        const user = await User.create({ phone: recipient, url: url, fullMessage: fulllMessage });
 
         console.log('User SAVED successfully:', user);
         res.status(200).json({ message: 'User saved successfully', user });

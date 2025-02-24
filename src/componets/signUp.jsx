@@ -1,16 +1,29 @@
 
 
+import { set } from "mongoose";
 import { useState, } from "react";
 import Form from 'react-bootstrap/Form';
 
+
 const SignUp = ({ phone }) => { 
+    const booksOfTheBible = [
+        'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
+        '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
+        'Ecclesiastes', 'SongOfSolomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel',
+        'Amos', 'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi', 'Matthew',
+        'Mark', 'Luke', 'John', 'Acts', 'Romans', '1Corinthians', '2Corinthians', 'Galatians', 'Ephesians', 'Philippians',
+        'Colossians', '1Thessalonians', '2Thessalonians', '1Timothy', '2Timothy', 'Titus', 'Philemon', 'Hebrews', 'James',
+        '1Peter', '2Peter', '1John', '2John', '3John', 'Jude', 'Revelation'
+    ];  
+    const [book, setBook] = useState(booksOfTheBible[0]);
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
-    const [url, setUrl] = useState('');
+    const [url, setUrl] = useState('https://bible-api.com/data/web/random');
+
+   
 
     const handleCheckboxChange = (event) => {
-        console.log("event", event);
         
         const targetId = event.target.id;
         
@@ -38,25 +51,56 @@ const SignUp = ({ phone }) => {
             setOT(false); // Uncheck other options
             
         }
+         else {
+           
+            setWholeBible(false);
+            setOT(false);
+            setNT(false);
+        }
 
      
-        
+    }  
         
        
         
-    }
-        const signup = async () => {
-            
+    const signup = async () => {
+        if(!wholeBible && !OT && !NT) {
             console.log("URL!", url);
-            phone = `+1${phone}`;
-              console.log("phone", phone);
+            setUrl('http://localhost:3001/api/random/' + book);
+        const response = await fetch(url);
+                console.log('Response:', response);
+                const data = await response.json();
+               
+                console.log('Data:', data);
+            const fullMessage = data.map(chapter => chapter.value).join(' ');
+            console.log('Message:', fullMessage); 
+        }
+        else {const response = await fetch(url);
+            const data = await response.json(); 
+                
+        
+            const textmessage = data.random_verse.text;
+                const verse = data.random_verse.verse;
+                const chapter = data.random_verse.chapter;
+                const book = data.random_verse.book;
+                const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
+              console.log("fullMessage", fullMessage);
+                console.log("phone login~!!!!!!!!!!!!!", phone);
+                console.log("URL! for update login", url); }
+     
+            
+
+           
+              
             try {
+                phone = `+1${phone}`;
+                console.log("phone", phone);
                 const response = await fetch('http://localhost:3001/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ phone, url }),
+                    body: JSON.stringify({ phone, url, fullMessage }),
                 })
 
                 if (!response.ok) {
@@ -71,6 +115,7 @@ const SignUp = ({ phone }) => {
                 console.error(error);
             }
         }
+    
         return (
             <div>
                 <Form onsubmit={signup}>
@@ -117,6 +162,18 @@ const SignUp = ({ phone }) => {
                             <Form.Label className="text-center label"> new testament only </Form.Label>
                         </div>
                     </Form.Group>
+                    <div>
+            <label htmlFor="books">Select a Book:</label>
+            <select
+                id="books"
+                name="books"
+                onChange={(e) => setBook(e.target.value)}
+            >
+                {booksOfTheBible.map((book, index) => (
+                    <option key={index} value={book}>{book}</option>
+                ))}
+            </select>
+        </div>
                     <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={signup}> create account </button>
                 </Form>
 

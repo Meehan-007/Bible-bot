@@ -27,11 +27,13 @@ router.get("/random/:book", async (req, res) => {
            
             
             
-                console.log(results[i]);
-                final.push(results[i]);
+                console.log("looping",results[i]);
+                final.push("final", results[i]);
                
         }
-        res.json({ final });
+        
+        res.json({ final })
+        
         
     }
         
