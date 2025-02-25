@@ -3,7 +3,7 @@ import { useState } from "react";
 import Form from 'react-bootstrap/Form';
 
 
-const Login = ({phone}) => {
+const Login = ({phone, }) => {
 const booksOfTheBible = [
     'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
     '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
@@ -14,12 +14,12 @@ const booksOfTheBible = [
     '1Peter', '2Peter', '1John', '2John', '3John', 'Jude', 'Revelation'
 ];
  
-    const [book, setBook] = useState(booksOfTheBible[0]);
+    const [book, setBook] = useState('genesis');
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
     const [url, setUrl] = useState('https://bible-api.com/data/web/random');
-let fullMessage
+
   
 
     const handleCheckboxChange = (event) => {
@@ -72,35 +72,23 @@ let fullMessage
                 console.log('Response:', response);
                 const data = await response.json();
                
-                console.log('Data:', data.final);
-             fullMessage = data.final.map(chapter => chapter.value).join(' ');
-            console.log('Message:', fullMessage);
         }
         else {
         const response = await fetch(url);
     const data = await response.json(); 
-        
-
-    const textmessage = data.random_verse.text;
-        const verse = data.random_verse.verse;
-        const chapter = data.random_verse.chapter;
-        const book = data.random_verse.book;
-        const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
-      console.log("fullMessage", fullMessage);
-        console.log("phone login~!!!!!!!!!!!!!", phone);
-        console.log("URL! for update login", url); 
+    
         }
         try {
             phone = `+1${phone}`;
                 console.log("phone", phone);
               console.log("URL! for update login", url);
-                console.log('Message:', fullMessage);
+                
             const response = await fetch('http://localhost:3001/login', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ url, fullMessage, phone }),
+                body: JSON.stringify({ url, phone }),
             })
 
             if (!response.ok) {
@@ -110,7 +98,7 @@ let fullMessage
 
             const data = await response.json();
             console.log("data", data);
-            finish();
+          
         } catch (error) {
             console.error(error);
         }

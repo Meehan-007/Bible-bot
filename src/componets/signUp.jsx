@@ -21,8 +21,7 @@ const SignUp = ({ phone }) => {
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
     let [url, setUrl] = useState('');
-    let message
-    let altUrl 
+   let altUrl
     
 
    
@@ -79,37 +78,26 @@ const SignUp = ({ phone }) => {
                 console.log('Response:', response);
                 const data = await response.json();
                
-                console.log('Data:', data.final);
-            const message1 = data.final.map(chapter => chapter.value).join(' ');
-            message = message1;
-            console.log('Message:', message); 
+                
         }
         else 
         {const response = await fetch(url);
             const data = await response.json(); 
                 
         
-            const textmessage = data.random_verse.text;
-                const verse = data.random_verse.verse;
-                const chapter = data.random_verse.chapter;
-                const bookBible = data.random_verse.book;
-                const totalMessage = `${textmessage} ${bookBible} ${chapter}:${verse}`;
-                message = totalMessage;   
-              console.log("fullMessage",message);
-                 console.log("URL! for update login", url);
-                 console.log('Message:', totalMessage);
+            
 
             }
      
                 phone = `+1${phone}`;
               
-                console.log("message frontend", message); 
+                
                 const response = await fetch('http://localhost:3001/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ phone, url, message }),
+                    body: JSON.stringify({ phone, url }),
                 })
 
                 if (!response.ok) {
@@ -120,7 +108,7 @@ const SignUp = ({ phone }) => {
                 const data = await response.json();
                 console.log("Login successful:", data); 
                 
-
+                
             } catch (error) {
                 console.error(error);
             }
