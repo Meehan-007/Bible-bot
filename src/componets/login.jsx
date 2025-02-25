@@ -19,7 +19,7 @@ const booksOfTheBible = [
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
     const [url, setUrl] = useState('https://bible-api.com/data/web/random');
-
+let fullMessage
   
 
     const handleCheckboxChange = (event) => {
@@ -64,14 +64,16 @@ const booksOfTheBible = [
     }
   
 
-    const update = async () => {
+    const update = async (event) => {
+        event.preventDefault();
+
         if(!wholeBible && !OT && !NT) {
         const response = await fetch('http://localhost:3001/api/random/' + book);
                 console.log('Response:', response);
                 const data = await response.json();
                
-                console.log('Data:', data);
-            const fullMessage = data.map(chapter => chapter.value).join(' ');
+                console.log('Data:', data.final);
+             fullMessage = data.final.map(chapter => chapter.value).join(' ');
             console.log('Message:', fullMessage);
         }
         else {
@@ -91,6 +93,8 @@ const booksOfTheBible = [
         try {
             phone = `+1${phone}`;
                 console.log("phone", phone);
+              console.log("URL! for update login", url);
+                console.log('Message:', fullMessage);
             const response = await fetch('http://localhost:3001/login', {
                 method: 'PUT',
                 headers: {
@@ -106,7 +110,7 @@ const booksOfTheBible = [
 
             const data = await response.json();
             console.log("data", data);
-            
+            finish();
         } catch (error) {
             console.error(error);
         }

@@ -93,7 +93,7 @@ app.post('/signup', async (req, res) => {
         console.log('Signup request:', req.body);
         const recipient = req.body.phone;
         const url = req.body.url;
-        const fulllMessage = req.body.fullMessage;
+        const fulllMessage = req.body.message;
 console.log('Recipient:', recipient);
 console.log('URL:', url);
         if (!recipient) {
