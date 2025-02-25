@@ -1,7 +1,6 @@
 
 
-import { set } from "mongoose";
-import { useState, } from "react";
+import { useEffect, useState, } from "react";
 import Form from 'react-bootstrap/Form';
 
 
@@ -15,11 +14,15 @@ const SignUp = ({ phone }) => {
         'Colossians', '1Thessalonians', '2Thessalonians', '1Timothy', '2Timothy', 'Titus', 'Philemon', 'Hebrews', 'James',
         '1Peter', '2Peter', '1John', '2John', '3John', 'Jude', 'Revelation'
     ];  
-    const [book, setBook] = useState(booksOfTheBible[0]);
+
+   
+    const [book, setBook] = useState('genesis');
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
-    const [url, setUrl] = useState('https://bible-api.com/data/web/random');
+    const [url, setUrl] = useState('');
+    const [message, setFullMessage] = useState('');
+    
 
    
 
@@ -52,7 +55,7 @@ const SignUp = ({ phone }) => {
             
         }
          else {
-           
+            console.log("drop-down" );
             setWholeBible(false);
             setOT(false);
             setNT(false);
@@ -61,46 +64,51 @@ const SignUp = ({ phone }) => {
      
     }  
         
-       
+     
         
-    const signup = async () => {
+    const signup = async (event) => {
+        event.preventDefault();
+       
+ try { 
         if(!wholeBible && !OT && !NT) {
+           await setUrl('http://localhost:3001/api/random/' + book);
             console.log("URL!", url);
-            setUrl('http://localhost:3001/api/random/' + book);
+            
         const response = await fetch(url);
                 console.log('Response:', response);
                 const data = await response.json();
                
-                console.log('Data:', data);
-            const fullMessage = data.map(chapter => chapter.value).join(' ');
-            console.log('Message:', fullMessage); 
+                console.log('Data:', data.final);
+            const message1 = data.final.map(chapter => chapter.value).join(' ');
+            setFullMessage(message1);
+            console.log('Message:', message1); 
         }
-        else {const response = await fetch(url);
+        else 
+        {const response = await fetch(url);
             const data = await response.json(); 
                 
         
             const textmessage = data.random_verse.text;
                 const verse = data.random_verse.verse;
                 const chapter = data.random_verse.chapter;
-                const book = data.random_verse.book;
-                const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
-              console.log("fullMessage", fullMessage);
-                console.log("phone login~!!!!!!!!!!!!!", phone);
-                console.log("URL! for update login", url); }
-     
-            
+                const bookBible = data.random_verse.book;
+                const totalMessage = `${textmessage} ${bookBible} ${chapter}:${verse}`;
+                setFullMessage(totalMessage);    
+              console.log("fullMessage",message);
+                 console.log("URL! for update login", url);
+                 console.log('Message:', totalMessage);
 
-           
-              
-            try {
+            }
+     
                 phone = `+1${phone}`;
-                console.log("phone", phone);
+               Promise.resolve(setFullMessage(message));
+                console.log("message frontend", message); 
                 const response = await fetch('http://localhost:3001/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ phone, url, fullMessage }),
+                    body: JSON.stringify({ phone, url, message }),
                 })
 
                 if (!response.ok) {
@@ -118,6 +126,7 @@ const SignUp = ({ phone }) => {
     
         return (
             <div>
+                <h1>Sign Up</h1>
                 <Form onsubmit={signup}>
                     <Form.Group>
 

@@ -118,7 +118,7 @@ console.log('URL:', url);
 app.put('/login', async (req, res) => {
     try {
         console.log('Login request: for the put', req.body);
-        const { phone, url } = req.body; 
+        const { phone, url, fullMessage } = req.body; 
         console.log('URL', url);
 
         const user = await User.findOneAndUpdate({ phone });
@@ -127,6 +127,7 @@ app.put('/login', async (req, res) => {
         }
         console.log('User found:', user.url);
         user.url = url;
+        user.fullMessage = fullMessage;
         await user.save();
 
         console.log('User updated successfully:', user);
