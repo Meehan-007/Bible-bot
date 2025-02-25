@@ -38,8 +38,6 @@ const Homepage = () => {
     const handleShowModal = (isSignup) => {
         setIsSignup(isSignup); // Set whether it's signup or login modal
         setShowModal(true);
-
-      
     };
      
     return (
