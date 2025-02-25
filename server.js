@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 15 * * 0-6'; // 7 AM every day
+let cronScheduleExpression = '0 16 * * 0-6'; // 7 AM every day
 let CronJob = cron.CronJob;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
@@ -46,7 +46,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
             console.log('checking laps', user);
             const recipient = user.phone;
             const url = user.url;
-            const fullMessage = user.fullMessage
+           
             
 
             try {
@@ -55,6 +55,20 @@ let job = new CronJob(cronScheduleExpression, async function () {
                     throw new Error(`API error: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
+                console.log('Data:', data);
+
+                if (!data.final){
+                    const textmessage = data.random_verse.text;
+        const verse = data.random_verse.verse;
+        const chapter = data.random_verse.chapter;
+        const book = data.random_verse.book;
+        const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
+
+                }
+                else {
+                    let fullMessage = data.final.map(chapter => chapter.value).join(' ');
+                    console.log('Message:', fullMessage); 
+                }
                 
                 console.log('Sending message to', recipient); // Log recipient
                  console.log('Message:', fullMessage); // Log message
@@ -93,7 +107,7 @@ app.post('/signup', async (req, res) => {
         console.log('Signup request:', req.body);
         const recipient = req.body.phone;
         const url = req.body.url;
-        const fulllMessage = req.body.fullMessage;
+        const fulllMessage = req.body.message;
 console.log('Recipient:', recipient);
 console.log('URL:', url);
         if (!recipient) {
@@ -140,8 +154,11 @@ app.put('/login', async (req, res) => {
 app.delete('/login', async (req, res) => {
     try {
         console.log('delete:', req.body);
-        const { phone } = req.body;
+        let { phone } = req.body;
         console.log('Phone:', phone);
+        phone = `+1${phone}`
+    
+        console.log('Phone2:', phone);
        const deletedUser = await User.findOneAndDelete({ phone})
         if (!deletedUser) {
             res.status(404).json({ message: 'No user found'});

@@ -27,7 +27,7 @@ router.get("/random/:book", async (req, res) => {
            
             
             
-                console.log("looping",results[i]);
+                console.log("",results[i]);
                 final.push("final", results[i]);
                
         }
