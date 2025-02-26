@@ -113,22 +113,27 @@ app.post('/signup', async (req, res) => {
         console.log('Signup request:', req.body);
         const recipient = req.body.phone;
         const url = req.body.url;
-        const fulllMessage = req.body.message;
-console.log('Recipient:', recipient);
-console.log('URL:', url);
+        const fullMessage = req.body.message;
+
+        console.log('Recipient:', recipient);
+        console.log('URL:', url);
+        
         if (!recipient) {
             return res.status(400).json({ error: "Phone number is required" });
         }
-        
 
-           console.log('Full message:', fulllMessage);
-        const user = await User.create({ phone: recipient, url: url, fullMessage: fulllMessage });
-
+        const user = await User.create({ phone: recipient, url: url, fullMessage: fullMessage });
         console.log('User SAVED successfully:', user);
         res.status(200).json({ message: 'User saved successfully', user });
 
     } catch (err) {
         console.error("Error saving user:", err);
+        
+        // Check for duplicate key error
+        if (err.code === 11000) { // 11000 is the error code for duplicate keys
+            return res.status(409).json({ error: 'This phone number is already signed up.' });
+        }
+
         res.status(500).json({ error: 'Failed to save user', details: err.message });
     }
 });
