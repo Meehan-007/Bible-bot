@@ -12,6 +12,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.10.0",
+    "mysql2": "^2.3.3",
+    "node-cron": "^3.0.3",
     "nodemon": "^3.1.9",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
@@ -19,9 +21,7 @@
     "react-scripts": "5.0.1",
     "sequelize": "^6.37.5",
     "twilio": "^5.4.3",
-    "web-vitals": "^4.2.4",
-    "mysql2": "^2.3.3"
-    
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "react-scripts start",

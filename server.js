@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import cron from 'cron';
+import cron from 'node-cron';
 import {User} from './models/user.js'
 import router from './api/bibleVerse.js'; 
 
@@ -33,8 +33,8 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log(err);
 });
 
-let cronScheduleExpression = '0 16 * * 0-6'; // 7 AM every day
-let CronJob = cron.CronJob;
+let cronScheduleExpression = '*/5 * * * *'; // Every 5 minutes
+let CronJob = cron.schedule;
 console.log('Cron Job is --- starting');
 let job = new CronJob(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
@@ -46,7 +46,8 @@ let job = new CronJob(cronScheduleExpression, async function () {
             console.log('checking laps', user);
             const recipient = user.phone;
             const url = user.url;
-           
+            let fullMessage = '';
+            let Message = '';
             
 
             try {
@@ -56,29 +57,31 @@ let job = new CronJob(cronScheduleExpression, async function () {
                 }
                 const data = await response.json();
                 console.log('Data:', data);
-
+              
                 if (!data.final){
                     const textmessage = data.random_verse.text;
         const verse = data.random_verse.verse;
         const chapter = data.random_verse.chapter;
         const book = data.random_verse.book;
-        const fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
+        fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
+        console.log('Message:', fullMessage);
 
                 }
                 else {
-                    let fullMessage = data.final.map(chapter => chapter.value).join(' ');
-                    console.log('Message:', fullMessage); 
+                     Message = data.final.map(chapter => chapter.value).join(' ');
+                    console.log('Message:', Message); 
                 }
                 
                 console.log('Sending message to', recipient); // Log recipient
-                 console.log('Message:', fullMessage); // Log message
+                 console.log('Message:', fullMessage || Message); // Log message
                 const message = await client.messages.create({
-                    body: fullMessage,
+                    body: fullMessage || Message,
                     from: '+18667943172',
                     to: recipient
                 })
+                console.log('Message sent successfully');
                 return { recipient, success: true, sid: message.sid }
-
+              
                 
 
             } catch (innerError) {
@@ -100,7 +103,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
     }
 }, null, true); // Start the cron job immediately
 
-
+job.start();
 // HTTP POST route for signup (separate from cron job)
 app.post('/signup', async (req, res) => {
     try {

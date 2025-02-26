@@ -6,70 +6,59 @@ import Login from './componets/login';
 import { Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const Homepage = () => {
     const [showModal, setShowModal] = useState(false); 
     const [isSignup, setIsSignup] = useState(true);
-
     const [verse, setVerse] = useState('');
     const [chapter, setChapter] = useState('');
     const [quote, setQuote] = useState(''); 
     const [book, setBook] = useState(''); 
     const [phone, setPhone] = useState(''); 
     
-    
     const create = () => {
         const url = 'https://bible-api.com/data/web/random';
         fetch(url)
             .then(response => response.json()) 
             .then(data => {
-                console.log(data.random_verse.text, "new one", data);
-                
-                // Return the data for the next .then()
-               
-           
-            setQuote(data.random_verse?.text || 'No quote found');
-             setChapter(data.random_verse?.chapter || 'No chapter found');
-             setVerse(data.random_verse?.verse || 'No verse found');
-            setBook(data.random_verse?.book || 'No book found');
-        }) .catch(error => console.error(error)); 
+                setQuote(data.random_verse?.text || 'No quote found');
+                setChapter(data.random_verse?.chapter || 'No chapter found');
+                setVerse(data.random_verse?.verse || 'No verse found');
+                setBook(data.random_verse?.book || 'No book found');
+            })
+            .catch(error => console.error(error)); 
     };
     
     const handleShowModal = (isSignup) => {
-        setIsSignup(isSignup); // Set whether it's signup or login modal
+        setIsSignup(isSignup);
         setShowModal(true);
     };
      
-    return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100" style={{ textAlign: 'center', padding: '20px' }}>
-            <h1 className="text-3xl font-bold text-blue-600">Welcome to Bible Quotes</h1> 
-            <span> {quote} </span>
-            <div> 
-            <span> {book}</span>
-            <span> {chapter} </span>
-            <span> { ": " + verse}</span>
-            </div>
-            <div className='container col-12 d-flex flex-column align-items-center'>
-                <button className=" mt-4 px-4 py-2 bg-white text-primary col-7 border border-primary" onClick={create}> generate bible quote </button>
-                <h6> typo your number with no dashes. example: 4568903241</h6>
-                <input className="mt-4 px-4 py-2 bg-white col-7 border" placeholder="phone number" onChange={e => setPhone(e.target.value)} />
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-7" onClick={() => handleShowModal(true)}>signup</button>
-                <input className="mt-4 px-4 py-2 bg-white col-7 border" placeholder="phone login" onChange={e => setPhone(e.target.value)}  />
-                <button className=" mt-4 px-4 py-2 b col-7" onClick={() => handleShowModal(false)}>Login</button>
+    return ( 
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen flex items-center justify-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Welcome to Bible Quotes</h1>
+                <p className="text-lg text-center text-gray-600 mb-4">{quote}</p>
+                <div className="text-gray-700 mb-4 text-center">
+                    <span className="font-semibold">{book}</span> <span>{chapter}</span>:<span>{verse}</span>
+                </div>
+                <button className="w-full py-2 mb-4 --bs-primary text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={create}>Generate Bible Quote</button>
+                <p className="text-sm text-gray-600 mb-2 text-center">Type your number with no dashes. Example: 4568903241</p>
+                <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone number" onChange={e => setPhone(e.target.value)} />
+                <button className="w-full py-2 mb-4 --bs-primary text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={() => handleShowModal(true)}>Sign Up</button>
+                <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone login" onChange={e => setPhone(e.target.value)} />
+                <button className="w-full py-2 --bs-primary rounded-lg hover:bg-gray-700 transition duration-300" onClick={() => handleShowModal(false)}>Login</button>
             </div>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{isSignup ? "sign up" : "login"} </Modal.Title>
+                    <Modal.Title>{isSignup ? "Sign Up" : "Login"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {isSignup ? <SignUp phone={phone}/> : <Login phone={phone} />}
+                    {isSignup ? <SignUp phone={phone} /> : <Login phone={phone} />}
                 </Modal.Body>
             </Modal>
         </div>
-
-
     );
 }
 
-export default Homepage
+export default Homepage;
