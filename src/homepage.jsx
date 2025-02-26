@@ -14,6 +14,7 @@ const Homepage = () => {
     const [quote, setQuote] = useState(''); 
     const [book, setBook] = useState(''); 
     const [phone, setPhone] = useState(''); 
+    const [errorMessage, setErrorMessage] = useState('');
     
     const create = () => {
         const url = 'https://bible-api.com/data/web/random';
@@ -29,6 +30,11 @@ const Homepage = () => {
     };
     
     const handleShowModal = (isSignup) => {
+        if (!phone) {
+            setErrorMessage('Please enter a phone number.');
+            return;
+        }
+        setErrorMessage('');
         setIsSignup(isSignup);
         setShowModal(true);
     };
@@ -41,12 +47,13 @@ const Homepage = () => {
                 <div className="text-gray-700 mb-4 text-center">
                     <span className="font-semibold">{book}</span> <span>{chapter}</span>:<span>{verse}</span>
                 </div>
-                <button className="w-full py-2 mb-4 --bs-primary text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={create}>Generate Bible Quote</button>
+                <button className="w-full py-2 mb-4 bg-primary text-white text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={create}>Generate Bible Quote</button>
                 <p className="text-sm text-gray-600 mb-2 text-center">Type your number with no dashes. Example: 4568903241</p>
                 <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone number" onChange={e => setPhone(e.target.value)} />
-                <button className="w-full py-2 mb-4 --bs-primary text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={() => handleShowModal(true)}>Sign Up</button>
+                {errorMessage && <p className="text-red  --bs-danger --bs-red bs-red bs-danger redText text-center mb-4">{errorMessage}</p>}
+                <button className="w-full py-2 mb-4 bg-primary text-white text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={() => handleShowModal(true)}>Sign Up</button>
                 <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone login" onChange={e => setPhone(e.target.value)} />
-                <button className="w-full py-2 --bs-primary rounded-lg hover:bg-gray-700 transition duration-300" onClick={() => handleShowModal(false)}>Login</button>
+                <button className="w-full py-2 bs-primary rounded-lg hover:bg-gray-700 transition duration-300" onClick={() => handleShowModal(false)}>Login</button>
             </div>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>

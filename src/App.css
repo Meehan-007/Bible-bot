@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.bs-primary {
+  color: #007bff;
+  border-color: #007bff;
+  background-color: white;
+}
+
+.redText {
+  color: red;
+  font-weight: bold;
+}
