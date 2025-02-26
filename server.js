@@ -43,7 +43,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
         const users = await User.find({}); // Get all users from the database
                console.log('Users:', users);
         const messagePromises = users.map(async (user) => {
-            console.log('checking laps', user);
+            
             const recipient = user.phone;
             const url = user.url;
             let fullMessage = '';
@@ -79,7 +79,10 @@ let job = new CronJob(cronScheduleExpression, async function () {
                     from: '+18667943172',
                     to: recipient
                 })
+                console.log('whats inside client.messages', client.messages)
+                console.log('Message created:', message);   
                 console.log('Message sent successfully');
+                console.log()
                 return { recipient, success: true, sid: message.sid }
               
                 
