@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState, } from "react";
 import Form from 'react-bootstrap/Form';
 
@@ -125,7 +126,7 @@ const SignUp = ({ phone }) => {
                 <Form.Group>
 
                     <div className="d-flex align-items-center">
-                        <Form.Control
+                        <Form.Check
                             className="w20 circle"
                             type="checkbox"
                             id="total"
@@ -139,7 +140,7 @@ const SignUp = ({ phone }) => {
                 <Form.Group>
                     <div className="d-flex align-items-center">
 
-                        <Form.Control
+                        <Form.Check
                             type="checkbox"
                             className="w20 circle"
                             id="OT"
@@ -154,14 +155,13 @@ const SignUp = ({ phone }) => {
                 <Form.Group>
                     <div className="d-flex align-items-center">
 
-                        <Form.Control
+                        <Form.Check
                             type="checkbox"
                             className="w20 circle"
                             id="NT"
                             label="random verse from the new testament"
                             checked={NT}
-                            onChange={(e) => handleCheckboxChange(e)}
-                        />
+                            onChange={(e) => handleCheckboxChange(e)} />
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>

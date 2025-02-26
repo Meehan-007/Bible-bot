@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { useState } from "react";
 import Form from 'react-bootstrap/Form';
 
@@ -128,11 +128,11 @@ const Login = ({ phone, }) => {
     }
     return (
         <div>
-            <Form onsubmit={update}>
+            <Form onSubmit={update}>
                 <Form.Group>
 
                     <div className="d-flex align-items-center">
-                        <Form.Control
+                        <Form.Check
                             className="w20 circle"
                             type="checkbox"
                             id="total"
@@ -146,7 +146,7 @@ const Login = ({ phone, }) => {
                 <Form.Group>
                     <div className="d-flex align-items-center">
 
-                        <Form.Control
+                        <Form.Check
                             type="checkbox"
                             className="w20 circle"
                             id="OT"
@@ -161,7 +161,7 @@ const Login = ({ phone, }) => {
                 <Form.Group>
                     <div className="d-flex align-items-center">
 
-                        <Form.Control
+                        <Form.Check
                             type="checkbox"
                             className="w20 circle"
                             id="NT"

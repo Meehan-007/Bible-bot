@@ -24,24 +24,28 @@ app.use('/api', router);
  //app.use("/api", api);
 const port = process.env.PORT || 3001;
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('Connected to MongoDB');
-}).catch(err => {
-    console.log(err);
-});
+const mongoUri = process.env.MONGODB_URI;
+
+if (!mongoUri) {
+    throw new Error("MONGODB_URI environment variable is not defined");
+}
+
+mongoose.connect(mongoUri)
+    .then(() => {
+        console.log('Connected to MongoDB');
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
 let cronScheduleExpression = '*/5 * * * *'; // Every 5 minutes
-let CronJob = cron.schedule;
 console.log('Cron Job is --- starting');
-let job = new CronJob(cronScheduleExpression, async function () {
+cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
 
     try {
         const users = await User.find({}); // Get all users from the database
-               console.log('Users:', users);
+        console.log('Users:', users);
         const messagePromises = users.map(async (user) => {
             
             const recipient = user.phone;
@@ -68,7 +72,7 @@ let job = new CronJob(cronScheduleExpression, async function () {
 
                 }
                 else {
-                     Message = data.final.map(chapter => chapter.value).join(' ');
+                     Message = data.final.map((item: { value: string }) => item.value).join(' ');
                     console.log('Message:', Message); 
                 }
                 
@@ -87,26 +91,27 @@ let job = new CronJob(cronScheduleExpression, async function () {
               
                 
 
-            } catch (innerError) {
-                console.error(`Error sending message to ${recipient}:`, innerError);
-                return { recipient, success: false, error: innerError.message };
-                // Handle error for individual users here.  You might want to log it or store it in the database.
+            } catch (innerError: unknown) {
+                if (innerError instanceof Error) {
+                    console.error(`Error sending message to ${recipient}:`, innerError);
+                    return { recipient, success: false, error: innerError.message };
+                } else {
+                    console.error(`Unexpected error sending message to ${recipient}:`, innerError);
+                    return { recipient, success: false, error: "An unexpected error occurred." };
+                }
             }
         })
-        // const results = await Promise.all(messagePromises);
-//         // console.log("Message sending results:", results);
-//         const successfulSends = results.filter(result => result && result.success); // Filter for successful sends
-// const failedSends = results.filter(result => result && !result.success); // Filter for failed sends
-
-// console.log("Successful sends:", successfulSends);
-// console.log("Failed sends:", failedSends);
+       
 
     } catch (error) {
         console.error("Error in cron job:", error);
     }
-}, null, true); // Start the cron job immediately
+});
 
-job.start();
+interface MongooseError extends Error {
+    code?: number; // Optional code property
+} 
+
 // HTTP POST route for signup (separate from cron job)
 app.post('/signup', async (req, res) => {
     try {
@@ -126,17 +131,23 @@ app.post('/signup', async (req, res) => {
         console.log('User SAVED successfully:', user);
         res.status(200).json({ message: 'User saved successfully', user });
 
-    } catch (err) {
+    } catch (err: unknown) {
         console.error("Error saving user:", err);
         
         // Check for duplicate key error
-        if (err.code === 11000) { // 11000 is the error code for duplicate keys
-            return res.status(409).json({ error: 'This phone number is already signed up.' });
+        if (err instanceof Error) {
+            const mongooseError = err as MongooseError; // Cast to custom error type
+            if (mongooseError.code === 11000) { // 11000 is the error code for duplicate keys
+                return res.status(409).json({ error: 'This phone number is already signed up.' });
+            }
+            return res.status(500).json({ error: 'Failed to save user', details: mongooseError.message });
         }
 
-        res.status(500).json({ error: 'Failed to save user', details: err.message });
+        // Handle unexpected error
+        res.status(500).json({ error: 'Failed to save user', details: 'An unexpected error occurred.' });
     }
 });
+
 
 
 
@@ -157,9 +168,16 @@ app.put('/login', async (req, res) => {
 
         console.log('User updated successfully:', user);
         res.status(200).json({ message: 'User updated successfully', user });
-    } catch (err) {
+    } catch (err: unknown) {
         console.error('Error updating user:', err);
-        res.status(500).json({ error: 'Failed to update user', details: err.message });
+        
+        // Check if err is an instance of Error
+        if (err instanceof Error) {
+            res.status(500).json({ error: 'Failed to update user', details: err.message });
+        } else {
+            // Handle unexpected error
+            res.status(500).json({ error: 'Failed to update user', details: 'An unexpected error occurred.' });
+        }
     }
 })
 app.delete('/login', async (req, res) => {
@@ -174,15 +192,19 @@ app.delete('/login', async (req, res) => {
         if (!deletedUser) {
             res.status(404).json({ message: 'No user found'});
             return;
-        };
+        }
         res.json(deletedUser);
-    } catch (err) {
+    } catch (err: unknown) {
         console.error('Error deleting user:', err);
-        res.status(500).json({ error: 'Failed to delete user', details: err.message });
-    }
         
-
-    
+        // Check if err is an instance of Error
+        if (err instanceof Error) {
+            res.status(500).json({ error: 'Failed to delete user', details: err.message });
+        } else {
+            // Handle unexpected error
+            res.status(500).json({ error: 'Failed to delete user', details: 'An unexpected error occurred.' });
+        }
+    }
 })
         app.listen(port, () => {
             console.log(`Server is running on port ${port}`);

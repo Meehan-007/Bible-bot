@@ -22,7 +22,7 @@ router.get("/random/:book", async (req, res) => {
         if (key > results.length - 6) {
             key = results.length - 6;
         }
-        let final = [];
+        let final: (string | any)[] = [];
         for(var i = key; i < key + 6; i++) {
            
             
@@ -38,9 +38,14 @@ router.get("/random/:book", async (req, res) => {
     }
         
         
- catch (err) {
-        console.error("Error getting random verse:", err);
-        res.status(500).json({ error: "Failed to get random verse", details: err.message });
+ catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error("Error getting random verse:", err);
+            res.status(500).json({ error: "Failed to get random verse", details: err.message });
+        } else {
+            console.error("Unexpected error:", err);
+            res.status(500).json({ error: "Failed to get random verse", details: "An unexpected error occurred." });
+        }
     }
 });
 
