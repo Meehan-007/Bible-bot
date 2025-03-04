@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './index.css';
 import "tailwindcss"; 
-import SignUp from './componets/signUp';
-import Login from './componets/login';
+import SignUp from './components/signUp';
+import Login from './components/login';
 import { Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

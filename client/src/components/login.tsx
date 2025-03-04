@@ -1,35 +1,31 @@
 import React from 'react';
-import { useEffect, useState, } from "react";
-import Form from 'react-bootstrap/Form';
+import { useState } from "react";
+import Form from 'react-bootstrap/esm/Form';
 
 
-const SignUp = ({ phone }) => {
+const Login = ({ phone, }) => {
     const booksOfTheBible = [
         'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
         '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
-        'Ecclesiastes', 'SongOfSolomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel',
+        'Ecclesiastes', 'SongofSolomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel',
         'Amos', 'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi', 'Matthew',
         'Mark', 'Luke', 'John', 'Acts', 'Romans', '1Corinthians', '2Corinthians', 'Galatians', 'Ephesians', 'Philippians',
         'Colossians', '1Thessalonians', '2Thessalonians', '1Timothy', '2Timothy', 'Titus', 'Philemon', 'Hebrews', 'James',
         '1Peter', '2Peter', '1John', '2John', '3John', 'Jude', 'Revelation'
     ];
 
-
     const [book, setBook] = useState('genesis');
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
-    let [url, setUrl] = useState('');
-    let altUrl
-    const [errorMessage, setErrorMessage] = useState('');
-
+    const [url, setUrl] = useState('https://bible-api.com/data/web/random');
 
 
 
     const handleCheckboxChange = (event) => {
-
         const targetId = event.target.id;
 
+        console.log("targetId", targetId);
 
         if (targetId === "total") {
             setUrl('https://bible-api.com/data/web/random');
@@ -55,74 +51,84 @@ const SignUp = ({ phone }) => {
 
         }
         else {
-            console.log("drop-down");
+            setUrl('http://localhost:3001/api/random/' + targetId);
+            console.log("URL:", url);
             setWholeBible(false);
             setOT(false);
             setNT(false);
         }
 
+        // URL construction (example)
+
 
     }
 
 
-
-    const signup = async (event) => {
+    const update = async (event) => {
         event.preventDefault();
-        setErrorMessage(''); // Clear previous error message
 
+        if (!wholeBible && !OT && !NT) {
+            const response = await fetch('http://localhost:3001/api/random/' + book);
+            console.log('Response:', response);
+            const data = await response.json();
+
+        }
+        else {
+            const response = await fetch(url);
+            const data = await response.json();
+
+        }
         try {
-            if (!wholeBible && !OT && !NT) {
-                altUrl = ('http://localhost:3001/api/random/' + book);
-                console.log("URL!", altUrl);
-                url = altUrl;
-                const response = await fetch(url);
-                console.log('Response:', response);
-                const data = await response.json();
-
-
-            }
-            else {
-                const response = await fetch(url);
-                const data = await response.json();
-
-
-
-
-            }
-
             phone = `+1${phone}`;
+            console.log("phone", phone);
+            console.log("URL! for update login", url);
 
-
-            const response = await fetch('http://localhost:3001/signup', {
-                method: 'POST',
+            const response = await fetch('http://localhost:3001/login', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ phone, url }),
-            });
+                body: JSON.stringify({ url, phone }),
+            })
 
             if (!response.ok) {
                 const errorData = await response.json(); // Try to get error details from server
-                setErrorMessage(errorData?.error || 'Signup failed. Please try again.'); // Set error message
-                throw new Error(`Signup failed: ${response.status} - ${errorData?.error || response.statusText}`);
+                throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
             }
 
             const data = await response.json();
-            console.log("Signup successful:", data);
+            console.log("data", data);
             window.location.reload();
-
         } catch (error) {
             console.error(error);
-            // Optionally set the error message here as well
-            setErrorMessage(error.message);
         }
     }
 
+    const deleting = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/login', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phone }),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json(); // Try to get error details from server
+                throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log("data", data);
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+        }
+    }
     return (
         <div>
-            <h1>Sign Up</h1>
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-            <Form onSubmit={signup}>
+            <Form onSubmit={update}>
                 <Form.Group>
 
                     <div className="d-flex align-items-center">
@@ -161,7 +167,8 @@ const SignUp = ({ phone }) => {
                             id="NT"
                             label="random verse from the new testament"
                             checked={NT}
-                            onChange={(e) => handleCheckboxChange(e)} />
+                            onChange={(e) => handleCheckboxChange(e)}
+                        />
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
@@ -177,7 +184,8 @@ const SignUp = ({ phone }) => {
                         ))}
                     </select>
                 </div>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={signup}> create account </button>
+                <button className=" mt-4 px-4 py-2 bg-danger text-white col-12" onClick={deleting}> unsubscribe </button>
+                <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={update}> update </button>
             </Form>
 
 
@@ -185,4 +193,5 @@ const SignUp = ({ phone }) => {
     );
 }
 
-export default SignUp
+
+export default Login;

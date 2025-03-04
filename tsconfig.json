@@ -14,11 +14,12 @@
     /* Type Checking */
     "strict": true,          /* Reduce the number of projects loaded automatically by TypeScript. */
     "jsx": "react",   
-    "module": "esnext",                
+    "module": "ES2022",
     "skipLibCheck": true, 
-    "outDir": "./dist",                  /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+    "outDir": "backEnd/dist", 
+    "rootDir": "./",                 /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     /* Language and Environment */
-    "target": "es2016",   
+    "target": "ES2022",
     "esModuleInterop": true, 
     
   
@@ -116,12 +117,10 @@
                                     /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "src/**/*.ts", // Includes all .ts files in the src directory and subdirectories
-    "src/*.ts",   // If user.ts and utils.ts are directly in src
-    "*.ts"        // Includes all .ts files in the project root
-, "models/user.ts", "server.ts"],
+    "backEnd/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ],
-  "type": "module", 
+ 
 }

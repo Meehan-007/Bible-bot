@@ -6,9 +6,8 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import cron from 'node-cron';
-import {User} from './models/user.js'
-import router from './api/bibleVerse.js'; 
-
+import {User} from './models/user'
+import router from './api/bibleVerse'; 
 
 
 
