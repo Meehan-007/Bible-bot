@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './index.css';
-import "tailwindcss"; 
-import SignUp from './components/signUp';
-import Login from './components/login';
+ import Login from './components/login.tsx';
+import SignUp from './components/signUp.tsx';
 import { Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -29,7 +28,7 @@ const Homepage = () => {
             .catch(error => console.error(error)); 
     };
     
-    const handleShowModal = (isSignup) => {
+    const handleShowModal = (isSignup: boolean) => {
         if (!phone) {
             setErrorMessage('Please enter a phone number.');
             return;
@@ -61,7 +60,7 @@ const Homepage = () => {
                     <Modal.Title>{isSignup ? "Sign Up" : "Login"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {isSignup ? <SignUp phone={phone} /> : <Login phone={phone} />}
+                     {isSignup ? <SignUp phone={phone} /> : <Login phone={phone} />} 
                 </Modal.Body>
             </Modal>
         </div>

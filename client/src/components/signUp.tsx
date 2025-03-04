@@ -1,9 +1,9 @@
 import React from 'react';
-import { useEffect, useState, } from "react";
+import { useState, } from "react";
 import Form from 'react-bootstrap/esm/Form';
 
 
-const SignUp = ({ phone }) => {
+const SignUp = ({ phone }: { phone: string }) => {
     const booksOfTheBible = [
         'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
         '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
@@ -26,7 +26,7 @@ const SignUp = ({ phone }) => {
 
 
 
-    const handleCheckboxChange = (event) => {
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
         const targetId = event.target.id;
 
@@ -66,7 +66,7 @@ const SignUp = ({ phone }) => {
 
 
 
-    const signup = async (event) => {
+    const signup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setErrorMessage(''); // Clear previous error message
 
@@ -102,19 +102,25 @@ const SignUp = ({ phone }) => {
             });
 
             if (!response.ok) {
-                const errorData = await response.json(); // Try to get error details from server
-                setErrorMessage(errorData?.error || 'Signup failed. Please try again.'); // Set error message
-                throw new Error(`Signup failed: ${response.status} - ${errorData?.error || response.statusText}`);
+                const errorData = await response.json();
+                const errorMessage = errorData && typeof errorData.error === 'string' 
+                    ? errorData.error 
+                    : 'Signup failed. Please try again.';
+                setErrorMessage(errorMessage);
+                throw new Error(`Signup failed: ${response.status} - ${errorMessage}`);
             }
 
             const data = await response.json();
             console.log("Signup successful:", data);
             window.location.reload();
 
-        } catch (error) {
+        } catch (error: unknown) {
             console.error(error);
-            // Optionally set the error message here as well
-            setErrorMessage(error.message);
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage('An unexpected error occurred');
+            }
         }
     }
 
@@ -177,7 +183,12 @@ const SignUp = ({ phone }) => {
                         ))}
                     </select>
                 </div>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={signup}> create account </button>
+                <button 
+                    className="mt-4 px-4 py-2 bg-primary text-white col-12" 
+                    type="submit"
+                > 
+                    create account 
+                </button>
             </Form>
 
 

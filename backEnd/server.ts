@@ -14,7 +14,8 @@ import router from './api/bibleVerse';
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
-
+console.log('client', client);
+console.log('accountSid', accountSid);
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -24,7 +25,7 @@ app.use('/api', router);
 const port = process.env.PORT || 3001;
 
 const mongoUri = process.env.MONGODB_URI;
-
+console.log('mongoUri', mongoUri);
 if (!mongoUri) {
     throw new Error("MONGODB_URI environment variable is not defined");
 }
