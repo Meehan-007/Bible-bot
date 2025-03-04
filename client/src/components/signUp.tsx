@@ -136,7 +136,7 @@ const SignUp = ({ phone }: { phone: string }) => {
                             className="w20 circle"
                             type="checkbox"
                             id="total"
-                            label="random verse from the whole bible"
+                            label=""
                             checked={wholeBible}
                             onChange={(e) => handleCheckboxChange(e)} />
                         <Form.Label className="text-center label"> whole bible</Form.Label>
@@ -150,7 +150,7 @@ const SignUp = ({ phone }: { phone: string }) => {
                             type="checkbox"
                             className="w20 circle"
                             id="OT"
-                            label="random verse from the old testament"
+                            label=""
                             checked={OT}
                             onChange={(e) => handleCheckboxChange(e)} />
                         <Form.Label className="text-center label"> old testament only</Form.Label>
@@ -165,7 +165,7 @@ const SignUp = ({ phone }: { phone: string }) => {
                             type="checkbox"
                             className="w20 circle"
                             id="NT"
-                            label="random verse from the new testament"
+                            label=""
                             checked={NT}
                             onChange={(e) => handleCheckboxChange(e)} />
                         <Form.Label className="text-center label"> new testament only </Form.Label>
