@@ -38,7 +38,8 @@ mongoose.connect(mongoUri)
         console.log(err);
     });
 
-let cronScheduleExpression = '*/5 * * * *'; // Every 5 minutes
+// Run at midnight (00:00) every day
+let cronScheduleExpression = '0 0 * * *';
 console.log('Cron Job is --- starting');
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
