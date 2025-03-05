@@ -1,8 +1,14 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const router = express.Router();
+
+// Method 1: Create __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 router.get("/random/:book", async (req, res) => {
     try {
@@ -11,7 +17,11 @@ router.get("/random/:book", async (req, res) => {
         if (!book) {
             return res.status(400).json({ error: "Book parameter is required" });
         }
-        const filePath = path.resolve(__dirname, '..', 'seed', `${book}.json`);
+        // Use either Method 1:
+        const filePath = path.join(__dirname, '../seed', `${book}.json`);
+        // Or Method 2:
+        // const filePath = fileURLToPath(new URL(`../seed/${book}.json`, import.meta.url));
+        
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const results = JSON.parse(fileContent);
         

@@ -18,60 +18,47 @@ const Login = ({ phone }: { phone: string }) => {
     const [wholeBible, setWholeBible] = useState(false);
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
-    const [url, setUrl] = useState('https://bible-api.com/data/web/random');
+    let [url, setUrl] = useState('https://bible-api.com/data/web/random');
 
 
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
-
-        console.log("targetId", targetId);
+        let newUrl = '';  // Create a local variable
 
         if (targetId === "total") {
-            setUrl('https://bible-api.com/data/web/random');
-            console.log("URL:", url);
+            newUrl = 'https://bible-api.com/data/web/random';
+            setUrl(newUrl);
+            console.log("URL:", newUrl);  // Use the local variable instead of url state
             setWholeBible(true)
-            console.log("wholeBible", wholeBible);
-            setOT(false); // Uncheck other options
-            setNT(false); // Uncheck other options
-        } else if (targetId === "OT") {
-
-            setUrl('https://bible-api.com/data/web/random/OT');
-            console.log("URL:", url);
-            setWholeBible(false); // Uncheck other options
-            setNT(false); // Uncheck other options
-
-        } else if (targetId === "NT") {
-            setUrl('https://bible-api.com/data/web/random/NT');
-            console.log("URL:", url);
-            setNT(true);
-            console.log("NT", NT);
-            setWholeBible(false); // Uncheck other options
-            setOT(false); // Uncheck other options
-
-        }
-        else {
-            setUrl('http://localhost:3001/api/random/' + targetId);
-            console.log("URL:", url);
-            setWholeBible(false);
             setOT(false);
             setNT(false);
-        }
-
-        // URL construction (example)
-
-
+        } else if (targetId === "OT") {
+            newUrl = 'https://bible-api.com/data/web/random/OT';
+            setUrl(newUrl);
+            console.log("URL:", newUrl);
+            setWholeBible(false);
+            setNT(false);
+        } else if (targetId === "NT") {
+            newUrl = 'https://bible-api.com/data/web/random/NT';
+            setUrl(newUrl);
+            console.log("URL:", newUrl);
+            setNT(true);
+            setWholeBible(false);
+            setOT(false);
+        } 
     }
 
 
     const update = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+        console.log(wholeBible, OT, NT)
         if (!wholeBible && !OT && !NT) {
-            const response = await fetch('http://localhost:3001/api/random/' + book);
-            console.log('Response:', response);
+            let newUrl = 'http://localhost:3001/api/random/' + book;
+            url = newUrl;
+            const response = await fetch(url);
+            console.log('Response: 1', response);
             const data = await response.json();
-
         }
         else {
             const response = await fetch(url);
@@ -81,7 +68,7 @@ const Login = ({ phone }: { phone: string }) => {
         try {
             phone = `+1${phone}`;
             console.log("phone", phone);
-            console.log("URL! for update login", url);
+            console.log("URL! for update login 2", url);
 
             const response = await fetch('http://localhost:3001/login', {
                 method: 'PUT',
@@ -98,7 +85,11 @@ const Login = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("data", data);
+            
+            // Add timeout before refresh
+            await new Promise(resolve => setTimeout(resolve, 200000)); // 2 second delay
             window.location.reload();
+            
         } catch (error) {
             console.error(error);
         }
@@ -121,7 +112,11 @@ const Login = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("data", data);
+            
+            // Add timeout before refresh
+            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
             window.location.reload();
+            
         } catch (error) {
             console.error(error);
         }
@@ -185,7 +180,9 @@ const Login = ({ phone }: { phone: string }) => {
                     </select>
                 </div>
                 <button className="mt-4 px-4 py-2 bg-danger text-white col-12" type="button" onClick={deleting}> unsubscribe </button>
-                <button className="mt-4 px-4 py-2 bg-primary text-white col-12" type="submit"> update </button>
+                <button className="mt-4 px-4 py-2 bg-primary text-white col-12" type="submit">
+                    update
+                </button>
             </Form>
 
 
