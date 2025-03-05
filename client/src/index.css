@@ -32,3 +32,48 @@ code {
 circle {
   padding: .5rem !important
 } 
+
+/* Responsive container */
+.container {
+    max-width: 100%;
+    padding: 1rem;
+}
+
+/* Checkbox container */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+/* Form controls */
+.form-select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Media query for mobile */
+@media (max-width: 768px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Custom styling for checkboxes */
+.w20.circle {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* Labels */
+.label {
+    margin-bottom: 0;
+    margin-left: 0.5rem;
+} 

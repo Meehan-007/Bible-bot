@@ -48,11 +48,13 @@ const Homepage = () => {
                 </div>
                 <button className="w-full py-2 mb-4 bg-primary text-white text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={create}>Generate Bible Quote</button>
                 <p className="text-sm text-gray-600 mb-2 text-center">Type your number with no dashes. Example: 4568903241</p>
+                <div className="d-flex flex-column gap-2 col-4 center">
                 <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone number" onChange={e => setPhone(e.target.value)} />
                 {errorMessage && <p className="text-red  --bs-danger --bs-red bs-red bs-danger redText text-center mb-4">{errorMessage}</p>}
                 <button className="w-full py-2 mb-4 bg-primary text-white text-gray-800 rounded-lg hover:bg-blue-300 transition duration-300" onClick={() => handleShowModal(true)}>Sign Up</button>
                 <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone login" onChange={e => setPhone(e.target.value)} />
                 <button className="w-full py-2 bs-primary rounded-lg hover:bg-gray-700 transition duration-300" onClick={() => handleShowModal(false)}>Login</button>
+                </div>
             </div>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>

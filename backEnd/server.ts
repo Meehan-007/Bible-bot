@@ -37,6 +37,12 @@ mongoose.connect(mongoUri)
         console.log(err);
     });
 
+    app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+}); 
+
 // Run at midnight (00:00) every day
 let cronScheduleExpression = '0 0 * * *';
 console.log('Cron Job is --- starting');

@@ -123,70 +123,79 @@ const Login = ({ phone }: { phone: string }) => {
         }
     }
     return (
-        <div>
-            <Form onSubmit={update}>
-                <Form.Group>
+        <div className="container p-3">
+            <Form onSubmit={update} className="d-flex flex-column gap-3">
+                <h1 className="text-center mb-4">Login</h1>
+                
+                <div className="row">
+                    <div className="col-12 col-md-8 col-lg-6 mx-auto">
+                        <Form.Group className="mb-3">
+                            <div className="d-flex flex-column gap-2">
+                                <Form.Check
+                                    type="checkbox"
+                                    className="checkbox-container"
+                                    id="total"
+                                    label=""
+                                    checked={wholeBible}
+                                    onChange={(e) => handleCheckboxChange(e)}
+                                />
+                                <Form.Label className="text-center">whole bible</Form.Label>
+                            </div>
+                        </Form.Group>
 
-                    <div className="d-flex align-items-center px-4">
-                        <Form.Check
-                            type="checkbox"
-                            className="w20 circle"
-                            id="total"
-                            label=""
-                            checked={wholeBible}
-                            onChange={(e) => handleCheckboxChange(e)} />
-                        <Form.Label className="text-center label"> whole bible</Form.Label>
+                        <Form.Group className="mb-3">
+                            <div className="d-flex flex-column gap-2">
+                                <Form.Check
+                                    type="checkbox"
+                                    className="checkbox-container"
+                                    id="OT"
+                                    label=""
+                                    checked={OT}
+                                    onChange={(e) => handleCheckboxChange(e)}
+                                />
+                                <Form.Label className="text-center">old testament only</Form.Label>
+                            </div>
+                        </Form.Group>
 
+                        <Form.Group className="mb-3">
+                            <div className="d-flex flex-column gap-2">
+                                <Form.Check
+                                    type="checkbox"
+                                    className="checkbox-container"
+                                    id="NT"
+                                    label=""
+                                    checked={NT}
+                                    onChange={(e) => handleCheckboxChange(e)}
+                                />
+                                <Form.Label className="text-center">new testament only</Form.Label>
+                            </div>
+                        </Form.Group>
+
+                        <div className="mb-3">
+                            <label htmlFor="books" className="d-block mb-2">Select a Book:</label>
+                            <select
+                                id="books"
+                                name="books"
+                                className="form-select"
+                                onChange={(e) => setBook(e.target.value)}
+                            >
+                                {booksOfTheBible.map((book, index) => (
+                                    <option key={index} value={book}>{book}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="d-grid gap-2">
+                            <button className="btn btn-danger" type="button" onClick={deleting}>
+                                unsubscribe
+                            </button>
+                            <button className="btn btn-primary" type="submit">
+                                update
+                            </button>
+                        </div>
                     </div>
-                </Form.Group>
-                <Form.Group>
-                    <div className="d-flex align-items-center px-4">
-
-                        <Form.Check
-                            type="checkbox"
-                            className="w20 circle"
-                            id="OT"
-                            label=""
-                            checked={OT}
-                            onChange={(e) => handleCheckboxChange(e)} />
-                        <Form.Label className="text-center label"> old testament only</Form.Label>
-                    </div>
-                </Form.Group>
-
-
-                <Form.Group>
-                    <div className="d-flex align-items-center px-4">
-
-                        <Form.Check
-                            type="checkbox"
-                            className="w20 circle"
-                            id="NT"
-                            label=""
-                            checked={NT}
-                            onChange={(e) => handleCheckboxChange(e)}
-                        />
-                        <Form.Label className="text-center label"> new testament only </Form.Label>
-                    </div>
-                </Form.Group>
-                <div>
-                    <label htmlFor="books">Select a Book:</label>
-                    <select
-                        id="books"
-                        name="books"
-                        onChange={(e) => setBook(e.target.value)}
-                    >
-                        {booksOfTheBible.map((book, index) => (
-                            <option key={index} value={book}>{book}</option>
-                        ))}
-                    </select>
                 </div>
-                <button className="mt-4 px-4 py-2 bg-danger text-white col-12" type="button" onClick={deleting}> unsubscribe </button>
-                <button className="mt-4 px-4 py-2 bg-primary text-white col-12" type="submit">
-                    update
-                </button>
             </Form>
-
-
         </div>
     );
 }
