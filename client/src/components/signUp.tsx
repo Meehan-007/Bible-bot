@@ -42,6 +42,7 @@ const SignUp = ({ phone }: { phone: string }) => {
 
             setUrl('https://bible-api.com/data/web/random/OT');
             console.log("URL:", url);
+            setOT(true);
             setWholeBible(false); // Uncheck other options
             setNT(false); // Uncheck other options
 

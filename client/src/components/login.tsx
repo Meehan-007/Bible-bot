@@ -24,7 +24,7 @@ const Login = ({ phone }: { phone: string }) => {
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
-        let newUrl = '';  // Create a local variable
+        let newUrl = '';
 
         if (targetId === "total") {
             newUrl = 'https://bible-api.com/data/web/random';
@@ -36,8 +36,8 @@ const Login = ({ phone }: { phone: string }) => {
         } else if (targetId === "OT") {
             newUrl = 'https://bible-api.com/data/web/random/OT';
             setUrl(newUrl);
-            console.log("URL:", newUrl);
             setWholeBible(false);
+            setOT(true);
             setNT(false);
         } else if (targetId === "NT") {
             newUrl = 'https://bible-api.com/data/web/random/NT';
@@ -46,7 +46,8 @@ const Login = ({ phone }: { phone: string }) => {
             setNT(true);
             setWholeBible(false);
             setOT(false);
-        } 
+        }
+        console.log("URL:", newUrl);
     }
 
 
@@ -85,11 +86,11 @@ const Login = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("data", data);
-            
+
             // Add timeout before refresh
             await new Promise(resolve => setTimeout(resolve, 200000)); // 2 second delay
             window.location.reload();
-            
+
         } catch (error) {
             console.error(error);
         }
@@ -112,11 +113,11 @@ const Login = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("data", data);
-            
+
             // Add timeout before refresh
-            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
+            // 2 second delay
             window.location.reload();
-            
+
         } catch (error) {
             console.error(error);
         }
@@ -128,8 +129,8 @@ const Login = ({ phone }: { phone: string }) => {
 
                     <div className="d-flex align-items-center px-4">
                         <Form.Check
-                            className="w20 circle"
                             type="checkbox"
+                            className="w20 circle"
                             id="total"
                             label=""
                             checked={wholeBible}
