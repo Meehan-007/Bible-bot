@@ -125,15 +125,15 @@ const SignUp = ({ phone }: { phone: string }) => {
     }
 
     return (
-        <div>
-            <h1>Sign Up</h1>
+        <div className="container p-3">
+            <h1 className="text-center mb-4"> Sign Up</h1>
             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-            <Form onSubmit={signup}>
-                <Form.Group>
+            <Form  onSubmit={signup} className="d-flex flex-column align-items-flex-start">
+                <Form.Group >
 
-                    <div className="d-flex align-items-center px-4">
+                    <div className="d-flex align-items-center">
                         <Form.Check
-                            className="w20 circle "
+                            className=""
                             type="checkbox"
                             id="total"
                             label=""
@@ -143,12 +143,12 @@ const SignUp = ({ phone }: { phone: string }) => {
 
                     </div>
                 </Form.Group>
-                <Form.Group>
-                    <div className="d-flex align-items-center px-4">
+                <Form.Group className="my-1">
+                    <div className="d-flex align-items-center">
 
                         <Form.Check
                             type="checkbox"
-                            className="w20 circle"
+                            className=""
                             id="OT"
                             label=""
                             checked={OT}
@@ -159,11 +159,11 @@ const SignUp = ({ phone }: { phone: string }) => {
 
 
                 <Form.Group>
-                    <div className="d-flex align-items-center px-4">
+                    <div className="d-flex align-items-center">
 
                         <Form.Check
                             type="checkbox"
-                            className="w20 circle"
+                            className=""
                             id="NT"
                             label=""
                             checked={NT}
@@ -171,7 +171,7 @@ const SignUp = ({ phone }: { phone: string }) => {
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
-                <div>
+                <div className="my-1">
                     <label htmlFor="books">Select a Book:</label>
                     <select
                         id="books"

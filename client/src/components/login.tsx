@@ -130,7 +130,7 @@ const Login = ({ phone }: { phone: string }) => {
                 <div className="row">
                     <div className="col-12 col-md-8 col-lg-6 mx-auto">
                         <Form.Group className="mb-3">
-                            <div className="d-flex flex-column gap-2">
+                            <div className="d-flex my-2">
                                 <Form.Check
                                     type="checkbox"
                                     className="checkbox-container"
@@ -144,7 +144,7 @@ const Login = ({ phone }: { phone: string }) => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <div className="d-flex flex-column gap-2">
+                            <div className="d-flex my-2">
                                 <Form.Check
                                     type="checkbox"
                                     className="checkbox-container"
@@ -158,7 +158,7 @@ const Login = ({ phone }: { phone: string }) => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <div className="d-flex flex-column gap-2">
+                            <div className="d-flex my-2">
                                 <Form.Check
                                     type="checkbox"
                                     className="checkbox-container"
