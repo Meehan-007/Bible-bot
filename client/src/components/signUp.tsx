@@ -23,8 +23,7 @@ const SignUp = ({ phone }: { phone: string }) => {
     let altUrl
     const [errorMessage, setErrorMessage] = useState('');
 
-
-
+    const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -56,7 +55,7 @@ const SignUp = ({ phone }: { phone: string }) => {
 
         }
         else {
-            console.log("drop-down");
+            
             setWholeBible(false);
             setOT(false);
             setNT(false);
@@ -73,7 +72,7 @@ const SignUp = ({ phone }: { phone: string }) => {
 
         try {
             if (!wholeBible && !OT && !NT) {
-                altUrl = ('http://localhost:3001/api/random/' + book);
+                altUrl = `${baseUrl}/api/random/${book}`;
                 console.log("URL!", altUrl);
                 url = altUrl;
                 const response = await fetch(url);
@@ -94,7 +93,7 @@ const SignUp = ({ phone }: { phone: string }) => {
             phone = `+1${phone}`;
 
 
-            const response = await fetch('http://localhost:3001/signup', {
+            const response = await fetch(`${baseUrl}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

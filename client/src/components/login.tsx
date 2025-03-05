@@ -20,7 +20,7 @@ const Login = ({ phone }: { phone: string }) => {
     const [NT, setNT] = useState(false);
     let [url, setUrl] = useState('https://bible-api.com/data/web/random');
 
-
+    const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
@@ -55,7 +55,7 @@ const Login = ({ phone }: { phone: string }) => {
         event.preventDefault();
         console.log(wholeBible, OT, NT)
         if (!wholeBible && !OT && !NT) {
-            let newUrl = 'http://localhost:3001/api/random/' + book;
+            const newUrl = `${baseUrl}/api/random/${book}`;
             url = newUrl;
             const response = await fetch(url);
             console.log('Response: 1', response);
@@ -71,7 +71,7 @@ const Login = ({ phone }: { phone: string }) => {
             console.log("phone", phone);
             console.log("URL! for update login 2", url);
 
-            const response = await fetch('http://localhost:3001/login', {
+            const response = await fetch(`${baseUrl}/login`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ const Login = ({ phone }: { phone: string }) => {
 
     const deleting = async () => {
         try {
-            const response = await fetch('http://localhost:3001/login', {
+            const response = await fetch(`${baseUrl}/login`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
