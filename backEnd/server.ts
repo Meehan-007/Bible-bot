@@ -8,8 +8,12 @@ dotenv.config();
 import cron from 'node-cron';
 import {User} from './models/user'
 import router from './api/bibleVerse'; 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
