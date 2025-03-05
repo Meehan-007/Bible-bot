@@ -3,7 +3,7 @@ import { useState } from "react";
 import Form from 'react-bootstrap/esm/Form';
 
 
-const Login = ({ phone, }) => {
+const Login = ({ phone }: { phone: string }) => {
     const booksOfTheBible = [
         'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
         '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
@@ -22,7 +22,7 @@ const Login = ({ phone, }) => {
 
 
 
-    const handleCheckboxChange = (event) => {
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
 
         console.log("targetId", targetId);
@@ -64,7 +64,7 @@ const Login = ({ phone, }) => {
     }
 
 
-    const update = async (event) => {
+    const update = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (!wholeBible && !OT && !NT) {
@@ -131,12 +131,12 @@ const Login = ({ phone, }) => {
             <Form onSubmit={update}>
                 <Form.Group>
 
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center px-4">
                         <Form.Check
                             className="w20 circle"
                             type="checkbox"
                             id="total"
-                            label="random verse from the whole bible"
+                            label=""
                             checked={wholeBible}
                             onChange={(e) => handleCheckboxChange(e)} />
                         <Form.Label className="text-center label"> whole bible</Form.Label>
@@ -144,13 +144,13 @@ const Login = ({ phone, }) => {
                     </div>
                 </Form.Group>
                 <Form.Group>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center px-4">
 
                         <Form.Check
                             type="checkbox"
                             className="w20 circle"
                             id="OT"
-                            label="random verse from the old testament"
+                            label=""
                             checked={OT}
                             onChange={(e) => handleCheckboxChange(e)} />
                         <Form.Label className="text-center label"> old testament only</Form.Label>
@@ -159,13 +159,13 @@ const Login = ({ phone, }) => {
 
 
                 <Form.Group>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center px-4">
 
                         <Form.Check
                             type="checkbox"
                             className="w20 circle"
                             id="NT"
-                            label="random verse from the new testament"
+                            label=""
                             checked={NT}
                             onChange={(e) => handleCheckboxChange(e)}
                         />
@@ -184,8 +184,8 @@ const Login = ({ phone, }) => {
                         ))}
                     </select>
                 </div>
-                <button className=" mt-4 px-4 py-2 bg-danger text-white col-12" onClick={deleting}> unsubscribe </button>
-                <button className=" mt-4 px-4 py-2 bg-primary text-white col-12" onClick={update}> update </button>
+                <button className="mt-4 px-4 py-2 bg-danger text-white col-12" type="button" onClick={deleting}> unsubscribe </button>
+                <button className="mt-4 px-4 py-2 bg-primary text-white col-12" type="submit"> update </button>
             </Form>
 
 

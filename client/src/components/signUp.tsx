@@ -131,9 +131,9 @@ const SignUp = ({ phone }: { phone: string }) => {
             <Form onSubmit={signup}>
                 <Form.Group>
 
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center px-4">
                         <Form.Check
-                            className="w20 circle"
+                            className="w20 circle "
                             type="checkbox"
                             id="total"
                             label=""
@@ -144,7 +144,7 @@ const SignUp = ({ phone }: { phone: string }) => {
                     </div>
                 </Form.Group>
                 <Form.Group>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center px-4">
 
                         <Form.Check
                             type="checkbox"
@@ -159,7 +159,7 @@ const SignUp = ({ phone }: { phone: string }) => {
 
 
                 <Form.Group>
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center px-4">
 
                         <Form.Check
                             type="checkbox"
