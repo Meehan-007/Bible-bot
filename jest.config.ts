@@ -40,5 +40,13 @@ export default {
   extensionsToTreatAsEsm: ['.ts'],
   modulePathIgnorePatterns: [
     "<rootDir>/client/"
+  ],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov'],
+  collectCoverageFrom: [
+    'backEnd/**/*.{ts,js}',
+    '!**/node_modules/**',
+    '!**/dist/**'
   ]
 };

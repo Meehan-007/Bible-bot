@@ -6,8 +6,8 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import cron from 'node-cron';
-import {User} from './models/user'
-import router from './api/bibleVerse'; 
+import { User } from './models/user'
+import router from './api/bibleVerse';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
- //app.use("/api", api);
+
 const port = process.env.PORT || 3001;
 
 const mongoUri = process.env.MONGODB_URI;
@@ -41,11 +41,11 @@ mongoose.connect(mongoUri)
         console.log(err);
     });
 
-    app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-}); 
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});
 
 // Run at midnight (00:00) every day
 let cronScheduleExpression = '0 0 * * *';
@@ -57,12 +57,12 @@ cron.schedule(cronScheduleExpression, async function () {
         const users = await User.find({}); // Get all users from the database
         console.log('Users:', users);
         const messagePromises = users.map(async (user) => {
-            
+
             const recipient = user.phone;
             const url = user.url;
             let fullMessage = '';
             let Message = '';
-            
+
 
             try {
                 const response = await fetch(url);
@@ -71,35 +71,35 @@ cron.schedule(cronScheduleExpression, async function () {
                 }
                 const data = await response.json();
                 console.log('Data:', data);
-              
-                if (!data.final){
+
+                if (!data.final) {
                     const textmessage = data.random_verse.text;
-        const verse = data.random_verse.verse;
-        const chapter = data.random_verse.chapter;
-        const book = data.random_verse.book;
-        fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
-        console.log('Message:', fullMessage);
+                    const verse = data.random_verse.verse;
+                    const chapter = data.random_verse.chapter;
+                    const book = data.random_verse.book;
+                    fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
+                    console.log('Message:', fullMessage);
 
                 }
                 else {
-                     Message = data.final.map((item: { value: string }) => item.value).join(' ');
-                    console.log('Message:', Message); 
+                    Message = data.final.map((item: { value: string }) => item.value).join(' ');
+                    console.log('Message:', Message);
                 }
-                
+
                 console.log('Sending message to', recipient); // Log recipient
-                 console.log('Message:', fullMessage || Message); // Log message
+                console.log('Message:', fullMessage || Message); // Log message
                 const message = await client.messages.create({
                     body: fullMessage || Message,
                     from: '+18667943172',
                     to: recipient
                 })
                 console.log('whats inside client.messages', client.messages)
-                console.log('Message created:', message);   
+                console.log('Message created:', message);
                 console.log('Message sent successfully');
                 console.log()
                 return { recipient, success: true, sid: message.sid }
-              
-                
+
+
 
             } catch (innerError: unknown) {
                 if (innerError instanceof Error) {
@@ -111,7 +111,7 @@ cron.schedule(cronScheduleExpression, async function () {
                 }
             }
         })
-       
+
 
     } catch (error) {
         console.error("Error in cron job:", error);
@@ -120,7 +120,7 @@ cron.schedule(cronScheduleExpression, async function () {
 
 interface MongooseError extends Error {
     code?: number; // Optional code property
-} 
+}
 
 // HTTP POST route for signup (separate from cron job)
 app.post('/signup', async (req, res) => {
@@ -132,7 +132,7 @@ app.post('/signup', async (req, res) => {
 
         console.log('Recipient:', recipient);
         console.log('URL:', url);
-        
+
         if (!recipient) {
             return res.status(400).json({ error: "Phone number is required" });
         }
@@ -143,7 +143,7 @@ app.post('/signup', async (req, res) => {
 
     } catch (err: unknown) {
         console.error("Error saving user:", err);
-        
+
         // Check for duplicate key error
         if (err instanceof Error) {
             const mongooseError = err as MongooseError; // Cast to custom error type
@@ -164,7 +164,7 @@ app.post('/signup', async (req, res) => {
 app.put('/login', async (req, res) => {
     try {
         console.log('Login request: for the put', req.body);
-        const { phone, url, fullMessage } = req.body; 
+        const { phone, url, fullMessage } = req.body;
         console.log('URL', url);
 
         const user = await User.findOneAndUpdate({ phone });
@@ -180,7 +180,7 @@ app.put('/login', async (req, res) => {
         res.status(200).json({ message: 'User updated successfully', user });
     } catch (err: unknown) {
         console.error('Error updating user:', err);
-        
+
         // Check if err is an instance of Error
         if (err instanceof Error) {
             res.status(500).json({ error: 'Failed to update user', details: err.message });
@@ -196,17 +196,17 @@ app.delete('/login', async (req, res) => {
         let { phone } = req.body;
         console.log('Phone:', phone);
         phone = `+1${phone}`
-    
+
         console.log('Phone2:', phone);
-       const deletedUser = await User.findOneAndDelete({ phone})
+        const deletedUser = await User.findOneAndDelete({ phone })
         if (!deletedUser) {
-            res.status(404).json({ message: 'No user found'});
+            res.status(404).json({ message: 'No user found' });
             return;
         }
         res.json(deletedUser);
     } catch (err: unknown) {
         console.error('Error deleting user:', err);
-        
+
         // Check if err is an instance of Error
         if (err instanceof Error) {
             res.status(500).json({ error: 'Failed to delete user', details: err.message });
@@ -216,6 +216,10 @@ app.delete('/login', async (req, res) => {
         }
     }
 })
-        app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
-        });
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+
+export default app;
