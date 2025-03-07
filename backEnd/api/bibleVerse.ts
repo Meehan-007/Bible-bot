@@ -32,9 +32,9 @@ router.get("/random/:book", async (req, res) => {
         let final: (string | any)[] = [];
         for(var i = key; i < key + 6; i++) {
             console.log("", results[i]);
-            final.push("final", results[i]);
+            final.push(results[i]);
         }
-        
+        console.log("final", final);
         res.json({ final });
         
     } catch (err: unknown) {
