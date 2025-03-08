@@ -48,5 +48,6 @@ export default {
     'backEnd/**/*.{ts,js}',
     '!**/node_modules/**',
     '!**/dist/**'
-  ]
+  ],
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts']
 };

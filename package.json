@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "cd backEnd && npm install && npm start",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.ts --coverage",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.ts",
     "develop": "concurrently \"cd backend && npm start\" \"cd client && npm start\"",
     "dev": " nodemon backEnd/server.ts",
     "build": "cd client && npm install && npm run build"

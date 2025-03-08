@@ -1,9 +1,9 @@
 {
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-      "module": "ESNext",
-      "target": "ESNext",
-      "allowJs": true,
-      "types": ["jest"],
-      "esModuleInterop": true
-    }
-  }
+        "moduleResolution": "node",
+        "types": ["jest", "node"],
+        "esModuleInterop": true
+    },
+    "include": ["./**/*.ts"]
+}
