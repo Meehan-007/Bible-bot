@@ -127,10 +127,10 @@ interface MongooseError extends Error {
 app.post('/signup', async (req, res) => {
     try {
         console.log('Signup request:', req.body);
-        const recipient = req.body.phone;
+        let recipient = req.body.phone;
         const url = req.body.url;
         const fullMessage = req.body.message;
-
+        recipient = `+1${recipient}`
         console.log('Recipient:', recipient);
         console.log('URL:', url);
         
@@ -172,8 +172,9 @@ app.post('/signup', async (req, res) => {
 app.put('/login', async (req, res) => {
     try {
         console.log('Login request: for the put', req.body);
-        const { phone, url, fullMessage } = req.body; 
+        let { phone, url, fullMessage } = req.body; 
         console.log('URL', url);
+        phone = `+1${phone}`
 
         const user = await User.findOneAndUpdate({ phone });
         if (!user) {

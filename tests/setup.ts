@@ -9,7 +9,18 @@ beforeAll(async () => {
     if (!mongoUri) {
         throw new Error('MONGODB_URI must be defined');
     }
-    await mongoose.connect(mongoUri);
+    try {
+        await mongoose.connect(mongoUri);
+        console.log('Connected to MongoDB in test environment');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        throw error;
+    }
+});
+
+beforeEach(async () => {
+    // Clean database before each test
+    await mongoose.connection.dropDatabase();
 });
 
 afterAll(async () => {

@@ -90,7 +90,7 @@ const SignUp = ({ phone }: { phone: string }) => {
 
             }
 
-            phone = `+1${phone}`;
+            
 
 
             const response = await fetch(`${baseUrl}/signup`, {

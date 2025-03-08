@@ -67,7 +67,7 @@ const Login = ({ phone }: { phone: string }) => {
 
         }
         try {
-            phone = `+1${phone}`;
+            
             console.log("phone", phone);
             console.log("URL! for update login 2", url);
 
