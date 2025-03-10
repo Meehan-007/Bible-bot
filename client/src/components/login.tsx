@@ -128,7 +128,7 @@ const Login = ({ phone }: { phone: string }) => {
                 <h1 className="text-center mb-4">Login</h1>
                 
                 <div className="row">
-                    <div className="col-12 col-md-8 col-lg-6 mx-auto">
+                    <div className="col-12 mx-auto">
                         <Form.Group className="mb-3">
                             <div className="d-flex my-2">
                                 <Form.Check
