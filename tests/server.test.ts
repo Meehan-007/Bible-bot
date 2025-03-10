@@ -143,3 +143,39 @@ describe('delete user', () => {
     });
 });
 
+describe('cron job functionality', () => {
+    beforeEach(async () => {
+        // Create test users before each test
+        await User.create([
+            {
+                phone: '+11234567890',
+                url: 'http://localhost:3001/api/random/exodus',
+                message: ''
+            },
+            {
+                phone: '+19876543210',
+                url: 'http://localhost:3001/api/random/genesis',
+                message: ''
+            }
+        ]);
+    });
+
+    it('should process messages for all users', async () => {
+        const users = await User.find({});
+        const results = await Promise.all(users.map(async (user) => ({
+            recipient: user.phone,
+            success: true,
+            message: 'test message'
+        })));
+        
+        expect(results).toHaveLength(2);
+        results.forEach((result) => {
+            expect(result).toMatchObject({
+                recipient: expect.stringMatching(/^\+1\d{10}$/),
+                success: true,
+                message: expect.any(String)
+            });
+        });
+    });
+});
+

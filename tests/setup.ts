@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 
 // Load test environment variables
-dotenv.config({ path: '.env.test' });
+dotenv.config({ path: '.env' });
 
 beforeAll(async () => {
     const mongoUri = process.env.MONGODB_URI;

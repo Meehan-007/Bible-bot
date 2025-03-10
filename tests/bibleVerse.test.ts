@@ -13,14 +13,24 @@ describe('BibleVerse API', () => {
     });
 });  
 
-// describe("data returned back from the api", () => {
-//     test("should have fields like verseNumber, value,", async () => {
-//         const response = await request(app).get('/random/Genesis');
-//         console.log(response.body);
-//         expect(response).toHaveProperty("verseNumber");
-//         expect(response).toHaveProperty("value");
-//     });
-// });
+describe("data returned back from the api", () => {
+    test("should have fields like verseNumber, value,", async () => {
+        const response = await request(app).get('/random/Genesis');
+        
+        expect(response.body.VerseNumber).toBeDefined;
 
+    });
+});
+
+
+
+describe("testing the length of the response", () => {
+    test("should return the first six verses", async () => {
+        
+        const response = await request(app).get('/random/Genesis');
+        
+        expect(response.body.final).toHaveLength(6);
+    });
+});
 
 

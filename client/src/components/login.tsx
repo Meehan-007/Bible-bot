@@ -88,7 +88,7 @@ const Login = ({ phone }: { phone: string }) => {
             console.log("data", data);
 
             // Add timeout before refresh
-            await new Promise(resolve => setTimeout(resolve, 200000)); // 2 second delay
+             // 2 second delay
             window.location.reload();
 
         } catch (error) {
