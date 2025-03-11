@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from "react";
-import Form from 'react-bootstrap/esm/Form';
+import Form from 'react-bootstrap/Form';
 
 
 const Login = ({ phone }: { phone: string }) => {

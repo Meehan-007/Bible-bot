@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.07% </span>
+                <span class="strong">14.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/27</span>
+                <span class='fraction'>4/27</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.07% </span>
+                <span class="strong">15.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/26</span>
+                <span class='fraction'>4/26</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -119,38 +119,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -175,32 +175,32 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 &nbsp;
-router.get("/random/:book", async (req, res) =&gt; {
-    try {
-        const { book } = req.params;
-        console.log("book name", book);
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!book) {
+router.get("/random/:book", <span class="fstat-no" title="function not covered" >async </span>(req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+        const { book } = <span class="cstat-no" title="statement not covered" >req.params;</span>
+<span class="cstat-no" title="statement not covered" >        console.log("book name", book);</span>
+<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!book) {</span>
 <span class="cstat-no" title="statement not covered" >            return res.status(400).json({ error: "Book parameter is required" });</span>
         }
         // Use either Method 1:
-        const filePath = path.join(__dirname, '../seed', `${book}.json`);
+        const filePath = <span class="cstat-no" title="statement not covered" >path.join(__dirname, '../seed', `${book}.json`);</span>
         // Or Method 2:
         // const filePath = fileURLToPath(new URL(`../seed/${book}.json`, import.meta.url));
         
-        const fileContent = fs.readFileSync(filePath, 'utf-8');
-        const results = JSON.parse(fileContent);
+        const fileContent = <span class="cstat-no" title="statement not covered" >fs.readFileSync(filePath, 'utf-8');</span>
+        const results = <span class="cstat-no" title="statement not covered" >JSON.parse(fileContent);</span>
         
-        var key = Math.floor(Math.random() * results.length);
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (key &gt; results.length - 6) {
+        var key = <span class="cstat-no" title="statement not covered" >Math.floor(Math.random() * results.length);</span>
+<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (key &gt; results.length - 6) {</span>
 <span class="cstat-no" title="statement not covered" >            key = results.length - 6;</span>
         }
-        let final: (string | any)[] = [];
-        for(var i = key; i &lt; key + 6; i++) {
-            console.log("", results[i]);
-            final.push(results[i]);
+        let final: (string | any)[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >        for(var i = <span class="cstat-no" title="statement not covered" >key;</span> i &lt; key + 6; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            console.log("", results[i]);</span>
+<span class="cstat-no" title="statement not covered" >            final.push(results[i]);</span>
         }
-        console.log("final", final);
-        res.json({ final });
+<span class="cstat-no" title="statement not covered" >        console.log("final", final);</span>
+<span class="cstat-no" title="statement not covered" >        res.json({ final });</span>
         
     } catch (err: unknown) {
 <span class="cstat-no" title="statement not covered" >        if (err instanceof Error) {</span>
@@ -220,7 +220,7 @@ export default router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-10T14:10:14.998Z
+                at 2025-03-10T18:26:44.706Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
