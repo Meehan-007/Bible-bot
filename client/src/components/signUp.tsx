@@ -68,45 +68,61 @@ const SignUp = ({ phone }: { phone: string }) => {
 
     const signup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setErrorMessage('');
+        setErrorMessage(''); // Clear previous error message
 
         try {
-            // First set the URL based on selection
             if (!wholeBible && !OT && !NT) {
-                url = `${baseUrl}/api/random/${book}`;
-            }
-            // else url is already set by checkbox handlers
+                altUrl = `${baseUrl}/api/random/${book}`;
+                console.log("URL!", altUrl);
+                url = altUrl;
+                const response = await fetch(url);
+                console.log('Response:', response);
+                const data = await response.json();
 
-            console.log("Attempting signup with:", {
-                url,
-                phone,
-                baseUrl
-            });
+
+            }
+            else {
+                const response = await fetch(url);
+                const data = await response.json();
+
+
+
+
+            }
+
+            
+
 
             const response = await fetch(`${baseUrl}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
-                    phone, 
-                    url: url || `${baseUrl}/api/random/${book}` // Fallback URL
-                }),
+                body: JSON.stringify({ phone, url }),
             });
 
             if (!response.ok) {
-                throw new Error(`Signup failed: ${response.status}`);
+                const errorData = await response.json();
+                const errorMessage = errorData && typeof errorData.error === 'string' 
+                    ? errorData.error 
+                    : 'Signup failed. Please try again.';
+                setErrorMessage(errorMessage);
+                throw new Error(`Signup failed: ${response.status} - ${errorMessage}`);
             }
 
             const data = await response.json();
             console.log("Signup successful:", data);
             window.location.reload();
 
-        } catch (error) {
-            console.error("Signup error:", error);
-            setErrorMessage(error instanceof Error ? error.message : 'Failed to signup');
+        } catch (error: unknown) {
+            console.error(error);
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage('An unexpected error occurred');
+            }
         }
-    };
+    }
 
     return (
         <div className="container p-3">
@@ -169,7 +185,6 @@ const SignUp = ({ phone }: { phone: string }) => {
                         ))}
                     </select>
                 </div>
-                <div data-testid="url-state">{url}</div>
                 <button 
                     className="mt-4 px-4 py-2 bg-primary text-white col-12" 
                     type="submit"

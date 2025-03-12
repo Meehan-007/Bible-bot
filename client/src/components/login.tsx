@@ -135,6 +135,7 @@ const Login = ({ phone }: { phone: string }) => {
                                     type="checkbox"
                                     className="checkbox-container"
                                     id="total"
+                                    data-testid="whole bible"
                                     label=""
                                     checked={wholeBible}
                                     onChange={(e) => handleCheckboxChange(e)}
@@ -149,6 +150,7 @@ const Login = ({ phone }: { phone: string }) => {
                                     type="checkbox"
                                     className="checkbox-container"
                                     id="OT"
+                                    data-testid="old testament only"
                                     label=""
                                     checked={OT}
                                     onChange={(e) => handleCheckboxChange(e)}
@@ -163,6 +165,7 @@ const Login = ({ phone }: { phone: string }) => {
                                     type="checkbox"
                                     className="checkbox-container"
                                     id="NT"
+                                    data-testid="new testament only"
                                     label=""
                                     checked={NT}
                                     onChange={(e) => handleCheckboxChange(e)}
@@ -193,6 +196,8 @@ const Login = ({ phone }: { phone: string }) => {
                                 update
                             </button>
                         </div>
+
+                        <div data-testid="url-display">{url}</div>
                     </div>
                 </div>
             </Form>
