@@ -76,7 +76,10 @@ const Homepage = () => {
                     <Modal.Title>{isSignup ? "Sign Up" : "Login"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                     {isSignup ? <SignUp phone={phone} /> : <Login phone={phone} />} 
+                     {isSignup ? 
+                        <SignUp phone={phone} onHide={() => setShowModal(false)} /> : 
+                        <Login phone={phone} onHide={() => setShowModal(false)} />
+                     } 
                 </Modal.Body>
             </Modal>
         </div>

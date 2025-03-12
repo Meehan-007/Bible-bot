@@ -3,7 +3,7 @@ import { useState, } from "react";
 import Form from 'react-bootstrap/Form';
 
 
-const SignUp = ({ phone }: { phone: string }) => {
+const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const booksOfTheBible = [
         'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
         '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
@@ -21,6 +21,7 @@ const SignUp = ({ phone }: { phone: string }) => {
     const [NT, setNT] = useState(false);
     let [url , setUrl] = useState('');
     let altUrl
+    const [isUpdated, setIsUpdated] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
@@ -92,7 +93,6 @@ const SignUp = ({ phone }: { phone: string }) => {
 
             
 
-
             const response = await fetch(`${baseUrl}/signup`, {
                 method: 'POST',
                 headers: {
@@ -112,10 +112,14 @@ const SignUp = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("Signup successful:", data);
-            window.location.reload();
+            setIsUpdated(true); 
+            setTimeout(() => {
+                onHide();
+            }, 1000); 
 
         } catch (error: unknown) {
             console.error(error);
+            setIsUpdated(false);
             if (error instanceof Error) {
                 setErrorMessage(error.message);
             } else {

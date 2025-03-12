@@ -3,7 +3,7 @@ import { useState } from "react";
 import Form from 'react-bootstrap/Form';
 
 
-const Login = ({ phone }: { phone: string }) => {
+const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const booksOfTheBible = [
         'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1Samuel', '2Samuel',
         '1Kings', '2Kings', '1Chronicles', '2Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
@@ -19,6 +19,7 @@ const Login = ({ phone }: { phone: string }) => {
     const [OT, setOT] = useState(false);
     const [NT, setNT] = useState(false);
     let [url, setUrl] = useState('https://bible-api.com/data/web/random');
+    const [isUpdated, setIsUpdated] = useState(false);
 
     const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
 
@@ -68,8 +69,7 @@ const Login = ({ phone }: { phone: string }) => {
         }
         try {
             
-            console.log("phone", phone);
-            console.log("URL! for update login 2", url);
+           
 
             const response = await fetch(`${baseUrl}/login`, {
                 method: 'PUT',
@@ -86,13 +86,14 @@ const Login = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("data", data);
-
-            // Add timeout before refresh
-             // 2 second delay
-            window.location.reload();
+            setIsUpdated(true); 
+            setTimeout(() => {
+                onHide();
+            }, 1000); // 2 second delay
 
         } catch (error) {
             console.error(error);
+            setIsUpdated(false);
         }
     }
 
@@ -113,13 +114,15 @@ const Login = ({ phone }: { phone: string }) => {
 
             const data = await response.json();
             console.log("data", data);
-
-            // Add timeout before refresh
-            // 2 second delay
-            window.location.reload();
+            setIsUpdated(true); 
+            setTimeout(() => {
+                onHide();
+            }, 1000); //
+             
 
         } catch (error) {
             console.error(error);
+            setIsUpdated(false);
         }
     }
     return (
@@ -192,12 +195,15 @@ const Login = ({ phone }: { phone: string }) => {
                             <button className="btn btn-danger" type="button" onClick={deleting}>
                                 unsubscribe
                             </button>
-                            <button className="btn btn-primary" type="submit">
-                                update
-                            </button>
+                            {!isUpdated && (
+                                <button 
+                                    className="mt-4 px-4 py-2 bg-primary text-white col-12" 
+                                    type="submit"
+                                > 
+                                    update 
+                                </button>
+                            )}
                         </div>
-
-                        <div data-testid="url-display">{url}</div>
                     </div>
                 </div>
             </Form>
