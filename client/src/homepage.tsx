@@ -28,11 +28,12 @@ const Homepage = () => {
             .catch(error => console.error(error)); 
     };
     
-    const handleShowModal = (isSignup: boolean) => {
+    const handleShowModal = async (isSignup: boolean) => {
         if (!phone) {
             setErrorMessage('Please enter a phone number.');
             return;
         }
+        
         setErrorMessage('');
         setIsSignup(isSignup);
         setShowModal(true);

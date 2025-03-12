@@ -4,7 +4,7 @@ import Homepage from './homepage';
 
 it('shows error message when trying to show modal without phone number', () => {
     render(<Homepage />);
-    const signupButton = screen.getByTestId('homepage-signup-button');
+    const signupButton = screen.getByText('Sign Up');
     fireEvent.click(signupButton);
     const errorMessage = screen.getByText('Please enter a phone number.');
     console.log('Captured error message:', errorMessage.textContent);
