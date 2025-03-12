@@ -29,8 +29,9 @@ const Homepage = () => {
     };
     
     const handleShowModal = async (isSignup: boolean) => {
-        if (!phone) {
-            setErrorMessage('Please enter a phone number.');
+        const phoneRegex = /^\d{10}$/;
+        if (!phone || !phoneRegex.test(phone)) {
+            setErrorMessage('Please enter a valid 10-digit phone number');
             return;
         }
         
@@ -61,7 +62,7 @@ const Homepage = () => {
                     Sign Up
                 </button>
                 <input className="w-full py-2 mb-4 border rounded-lg px-3" placeholder="Phone login" onChange={e => setPhone(e.target.value)} />
-                <button className="w-full py-2 bs-primary rounded-lg hover:bg-gray-700 transition duration-300" onClick={() => handleShowModal(false)}>Login</button>
+                <button className="w-full py-2 bs-primary rounded-lg hover:bg-gray-700 transition duration-300" data-testid="homepage-login-button" onClick={() => handleShowModal(false)}>Login</button>
                 </div>
             </div>
 
@@ -75,7 +76,10 @@ const Homepage = () => {
                     <Modal.Title>{isSignup ? "Sign Up" : "Login"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                     {isSignup ? <SignUp phone={phone} /> : <Login phone={phone} />} 
+                     {isSignup ? 
+                        <SignUp phone={phone} onHide={() => setShowModal(false)} /> : 
+                        <Login phone={phone} onHide={() => setShowModal(false)} />
+                     } 
                 </Modal.Body>
             </Modal>
         </div>

@@ -130,13 +130,24 @@ app.post('/signup', async (req, res) => {
         let recipient = req.body.phone;
         const url = req.body.url;
         const fullMessage = req.body.message;
+        
+        // Validate phone number format
+        const phoneRegex = /^\d{10}$/;  // Exactly 10 digits
+        if (!phoneRegex.test(recipient)) {
+            return res.status(400).json({ 
+                error: "Invalid phone number. Please enter exactly 10 digits."
+            });
+        }
+
         recipient = `+1${recipient}`
-        console.log('Recipient:', recipient);
-        console.log('URL:', url);
+        
         
         if (!recipient) {
             return res.status(400).json({ error: "Phone number is required" });
         }
+         
+          
+          
 
         const user = await User.create({ phone: recipient, url: url, fullMessage: fullMessage });
         console.log('User SAVED successfully:', user);
@@ -149,20 +160,16 @@ app.post('/signup', async (req, res) => {
             }
         });
 
-    } catch (err: unknown) {
+    } catch (err: any) {  // Use `any` instead of `unknown` for easier error handling
         console.error("Error saving user:", err);
-        
-        // Check for duplicate key error
-        if (err instanceof Error) {
-            const mongooseError = err as MongooseError; // Cast to custom error type
-            if (mongooseError.code === 11000) { // 11000 is the error code for duplicate keys
-                return res.status(409).json({ error: 'This phone number is already signed up.' });
-            }
-            return res.status(500).json({ error: 'Failed to save user', details: mongooseError.message });
-        }
 
-        // Handle unexpected error
-        res.status(500).json({ error: 'Failed to save user', details: 'An unexpected error occurred.' });
+        // Check if it's a duplicate key error
+        if (err.code === 11000 || err.code === 11001) { 
+            console.log("Duplicate key error:", err);
+            return res.status(409).json({ error: 'This phone number is already signed up.' });
+        }
+            return res.status(500).json({ error: 'Failed to save user', details: err.message });
+        
     }
 });
 
