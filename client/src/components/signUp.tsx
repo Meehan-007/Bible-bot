@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, } from "react";
 import Form from 'react-bootstrap/Form';
+import { Alert } from 'react-bootstrap';
 
 
 const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
@@ -23,6 +24,7 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     let altUrl
     const [isUpdated, setIsUpdated] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
 
@@ -69,7 +71,8 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
     const signup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setErrorMessage(''); // Clear previous error message
+        setErrorMessage('');
+        setSuccessMessage('');
 
         try {
             if (!wholeBible && !OT && !NT) {
@@ -79,7 +82,7 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                 const response = await fetch(url);
                 console.log('Response:', response);
                 const data = await response.json();
-
+                
 
             }
             else {
@@ -112,7 +115,8 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             const data = await response.json();
             console.log("Signup successful:", data);
-            setIsUpdated(true); 
+            setIsUpdated(true);
+            setSuccessMessage('Successfully signed up!');
             setTimeout(() => {
                 onHide();
             }, 1000); 
@@ -130,8 +134,17 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
     return (
         <div className="container p-3">
-            <h1 className="text-center mb-4"> Sign Up</h1>
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            <h1 className="text-center mb-4">Sign Up</h1>
+            {successMessage && (
+                <Alert variant="success" className="text-center">
+                    {successMessage}
+                </Alert>
+            )}
+            {errorMessage && (
+                <Alert variant="danger" className="text-center">
+                    {errorMessage}
+                </Alert>
+            )}
             <Form  onSubmit={signup} className="d-flex flex-column align-items-flex-start">
                 <Form.Group >
 

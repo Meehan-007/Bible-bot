@@ -12,13 +12,18 @@ import router from './api/bibleVerse';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+
+
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
+const apiKey = process.env.TWILIO_API_KEY;
+const apiSecret = process.env.TWILIO_API_SECRET;
+
+const client = twilio(apiKey, apiSecret, { accountSid });
 
 const app = express();
 app.use(cors());
@@ -37,6 +42,8 @@ if (!mongoUri) {
 mongoose.connect(mongoUri)
     .then(() => {
         console.log('Connected to MongoDB');
+        console.log('Connected to database:', mongoose.connection.name);
+
     })
     .catch(err => {
         console.log(err);
@@ -48,13 +55,14 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 }); 
 
-// Run at midnight (00:00) every day
-let cronScheduleExpression = '0 0 * * *';
-console.log('Cron Job is --- starting');
+// Run at 5 PM every day
+let cronScheduleExpression = '0 17 * * *';
+
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
 
     try {
+         
         const users = await User.find({}); // Get all users from the database
         console.log('Users:', users);
         const messagePromises = users.map(async (user) => {
@@ -87,17 +95,14 @@ cron.schedule(cronScheduleExpression, async function () {
                     console.log('Message:', Message); 
                 }
                 
-                console.log('Sending message to', recipient); // Log recipient
-                 console.log('Message:', fullMessage || Message); // Log message
+            
+
                 const message = await client.messages.create({
                     body: fullMessage || Message,
                     from: '+18667943172',
                     to: recipient
                 })
-                console.log('whats inside client.messages', client.messages)
-                console.log('Message created:', message);   
-                console.log('Message sent successfully');
-                console.log()
+                
                 return { recipient, success: true, sid: message.sid }
               
                 
