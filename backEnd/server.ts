@@ -56,7 +56,7 @@ app.get("*", (req, res) => {
 }); 
 
 // Run at 5 PM every day
-let cronScheduleExpression = '0 17 * * *';
+let cronScheduleExpression = '0 8 * * *';
 
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');

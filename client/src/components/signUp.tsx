@@ -29,42 +29,42 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-
         const targetId = event.target.id;
 
-
         if (targetId === "total") {
-            setUrl('https://bible-api.com/data/web/random');
-            console.log("URL:", url);
-            setWholeBible(true)
-            console.log("wholeBible", wholeBible);
-            setOT(false); // Uncheck other options
-            setNT(false); // Uncheck other options
+            // Toggle wholeBible
+            if (wholeBible) {
+                setWholeBible(false);
+                setUrl('');
+            } else {
+                setUrl('https://bible-api.com/data/web/random');
+                setWholeBible(true);
+                setOT(false);
+                setNT(false);
+            }
         } else if (targetId === "OT") {
-
-            setUrl('https://bible-api.com/data/web/random/OT');
-            console.log("URL:", url);
-            setOT(true);
-            setWholeBible(false); // Uncheck other options
-            setNT(false); // Uncheck other options
-
+            // Toggle OT
+            if (OT) {
+                setOT(false);
+                setUrl('');
+            } else {
+                setUrl('https://bible-api.com/data/web/random/OT');
+                setOT(true);
+                setWholeBible(false);
+                setNT(false);
+            }
         } else if (targetId === "NT") {
-            setUrl('https://bible-api.com/data/web/random/NT');
-            console.log("URL:", url);
-            setNT(true);
-            console.log("NT", NT);
-            setWholeBible(false); // Uncheck other options
-            setOT(false); // Uncheck other options
-
+            // Toggle NT
+            if (NT) {
+                setNT(false);
+                setUrl('');
+            } else {
+                setUrl('https://bible-api.com/data/web/random/NT');
+                setNT(true);
+                setWholeBible(false);
+                setOT(false);
+            }
         }
-        else {
-            
-            setWholeBible(false);
-            setOT(false);
-            setNT(false);
-        }
-
-
     }
 
 
@@ -193,7 +193,7 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                 <div className="d-flex align-items-center justify-content-center">
                     <hr className=" my-4 col-4"/> <p className='mx-2 text-center' style={{marginBottom: 0}}> Or </p> <hr className=" my-4 col-4"/>
                 </div>
-                <div className="my-1">
+                <div className="my-1 mb-4">
                     <label htmlFor="books" className='mb-2'>Select a Book:</label>
                     <select
                         id="books"

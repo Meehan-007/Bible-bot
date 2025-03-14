@@ -26,31 +26,46 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
-        let newUrl = '';
-
+        
         if (targetId === "total") {
-            newUrl = 'https://bible-api.com/data/web/random';
-            setUrl(newUrl);
-            console.log("URL:", newUrl);  // Use the local variable instead of url state
-            setWholeBible(true)
-            setOT(false);
-            setNT(false);
+            // Toggle wholeBible
+            if (wholeBible) {
+                setWholeBible(false);
+                setUrl('');
+            } else {
+                setUrl('https://bible-api.com/data/web/random');
+                setWholeBible(true);
+                setOT(false);
+                setNT(false);
+            }
         } else if (targetId === "OT") {
-            newUrl = 'https://bible-api.com/data/web/random/OT';
-            setUrl(newUrl);
-            setWholeBible(false);
-            setOT(true);
-            setNT(false);
+            // Toggle OT
+            if (OT) {
+                setOT(false);
+                setUrl('');
+            } else {
+                setUrl('https://bible-api.com/data/web/random/OT');
+                setOT(true);
+                setWholeBible(false);
+               setNT(false);
+    
+     }
         } else if (targetId === "NT") {
-            newUrl = 'https://bible-api.com/data/web/random/NT';
-            setUrl(newUrl);
-            console.log("URL:", newUrl);
-            setNT(true);
-            setWholeBible(false);
-            setOT(false);
+            // Toggle NT
+            if (NT) {
+                setNT(false);
+                setUrl('');
+            } else {
+                setUrl('https://bible-api.com/data/web/random/NT');
+                setNT(true);
+                setWholeBible(false);
+                setOT(false);
+            }
         }
-        console.log("URL:", newUrl);
-    }
+    
+    }    
+       
+            
 
 
     const update = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -93,11 +108,13 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             const data = await response.json();
             console.log("data", data);
-            setIsUpdated(true); 
             setSuccessMessage('Successfully updated!');
+            setIsUpdated(true);
+            
             setTimeout(() => {
+                
                 onHide();
-            }, 1000); // 2 second delay
+            }, 500); // 2 second delay
 
         } catch (error) {
             console.error(error);
@@ -198,7 +215,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                         <div className="d-flex align-items-center justify-content-center">
                     <hr className=" my-4 col-4"/> <p className='mx-2 text-center' style={{marginBottom: 0}}> Or </p> <hr className=" my-4 col-4"/>
                 </div>
-                        <div className="mb-3">
+                        <div className="my-1 mb-4">
                             <label htmlFor="books" className="d-block mb-2">Select a Book:</label>
                             <select
                                 id="books"
@@ -213,7 +230,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                         </div>
 
                         <div className="d-grid gap-2">
-                            <button className="btn btn-danger" type="button" onClick={deleting}>
+                            <button className="btn btn-danger mt-2" type="button" onClick={deleting}>
                                 unsubscribe
                             </button>
                             {!isUpdated && (
