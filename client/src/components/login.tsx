@@ -151,7 +151,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
             )}
                 <div className="row">
                     <div className="col-12 mx-auto">
-                        <Form.Group className="mb-3">
+                        <Form.Group className="">
                             <div className="d-flex my-2">
                                 <Form.Check
                                     type="checkbox"
@@ -166,7 +166,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                             </div>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
+                        <Form.Group >
                             <div className="d-flex my-2">
                                 <Form.Check
                                     type="checkbox"
@@ -181,7 +181,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                             </div>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
+                        <Form.Group>
                             <div className="d-flex my-2">
                                 <Form.Check
                                     type="checkbox"
@@ -195,7 +195,9 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                                 <Form.Label className="text-center">new testament only</Form.Label>
                             </div>
                         </Form.Group>
-
+                        <div className="d-flex align-items-center justify-content-center">
+                    <hr className=" my-4 col-4"/> <p className='mx-2 text-center' style={{marginBottom: 0}}> Or </p> <hr className=" my-4 col-4"/>
+                </div>
                         <div className="mb-3">
                             <label htmlFor="books" className="d-block mb-2">Select a Book:</label>
                             <select
@@ -216,7 +218,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                             </button>
                             {!isUpdated && (
                                 <button 
-                                    className="mt-4 px-4 py-2 bg-primary text-white col-12" 
+                                    className="px-4 py-2 bg-primary text-white col-12" 
                                     type="submit"
                                 > 
                                     update 

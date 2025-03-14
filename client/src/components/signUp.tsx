@@ -190,11 +190,15 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                         <Form.Label className="text-center label"> new testament only </Form.Label>
                     </div>
                 </Form.Group>
+                <div className="d-flex align-items-center justify-content-center">
+                    <hr className=" my-4 col-4"/> <p className='mx-2 text-center' style={{marginBottom: 0}}> Or </p> <hr className=" my-4 col-4"/>
+                </div>
                 <div className="my-1">
-                    <label htmlFor="books">Select a Book:</label>
+                    <label htmlFor="books" className='mb-2'>Select a Book:</label>
                     <select
                         id="books"
                         name="books"
+                        className="form-select"
                         onChange={(e) => setBook(e.target.value)}
                     >
                         {booksOfTheBible.map((book, index) => (
