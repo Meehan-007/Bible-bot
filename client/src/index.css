@@ -76,4 +76,35 @@ circle {
 .label {
     margin-bottom: 0;
     margin-left: 0.5rem;
+
 } 
+.highlight{
+  color: #007bff !important;
+  font-weight: bold !important;
+}
+button {
+    border-radius: 5px !important;
+    border: 1px solid #007bff !important;
+}
+input{
+  border-radius: 5px !important;
+  
+}
+
+@media (max-width: 430px) {
+  .w75{
+    width: 75%;
+  }
+  .mobile-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobile-center p {
+    text-align: left;
+  }
+  .col-m10 {
+    width: 75% !important;
+  }
+}
