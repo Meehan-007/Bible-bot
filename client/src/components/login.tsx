@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from "react";
 import Form from 'react-bootstrap/Form';
-
+import { Alert } from 'react-bootstrap';
 
 const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const booksOfTheBible = [
@@ -20,7 +20,8 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const [NT, setNT] = useState(false);
     let [url, setUrl] = useState('https://bible-api.com/data/web/random');
     const [isUpdated, setIsUpdated] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +55,8 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
     const update = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setErrorMessage(''); 
+        setSuccessMessage('');
         console.log(wholeBible, OT, NT)
         if (!wholeBible && !OT && !NT) {
             const newUrl = `${baseUrl}/api/random/${book}`;
@@ -80,13 +83,18 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
             })
 
             if (!response.ok) {
-                const errorData = await response.json(); // Try to get error details from server
+                const errorData = await response.json(); //
+                const errorMessage = errorData && typeof errorData.error === 'string' 
+                    ? errorData.error 
+                    : 'login failed. Please try again.';
+                setErrorMessage(errorMessage); 
                 throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
             }
 
             const data = await response.json();
             console.log("data", data);
             setIsUpdated(true); 
+            setSuccessMessage('Successfully updated!');
             setTimeout(() => {
                 onHide();
             }, 1000); // 2 second delay
@@ -98,6 +106,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     }
 
     const deleting = async () => {
+        setSuccessMessage('');
         try {
             const response = await fetch(`${baseUrl}/login`, {
                 method: 'DELETE',
@@ -115,9 +124,10 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
             const data = await response.json();
             console.log("data", data);
             setIsUpdated(true); 
-            setTimeout(() => {
+            setSuccessMessage('Successfully unsubscribed!');
+            setTimeout(() => {  
                 onHide();
-            }, 1000); //
+            }, 1000); 
              
 
         } catch (error) {
@@ -129,7 +139,16 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
         <div className="container p-3">
             <Form onSubmit={update} className="d-flex flex-column gap-3">
                 <h1 className="text-center mb-4">Login</h1>
-                
+                {successMessage && (
+                <Alert variant="success" className="text-center">
+                    {successMessage}
+                </Alert>
+            )}
+            {errorMessage && (
+                <Alert variant="danger" className="text-center">
+                    {errorMessage}
+                </Alert>
+            )}
                 <div className="row">
                     <div className="col-12 mx-auto">
                         <Form.Group className="mb-3">
