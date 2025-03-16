@@ -73,7 +73,8 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
         event.preventDefault();
         setErrorMessage('');
         setSuccessMessage('');
-
+        const form = event.target as HTMLFormElement;
+        const agree = form.agree.checked;
         try {
             if (!wholeBible && !OT && !NT) {
                 altUrl = `${baseUrl}/api/random/${book}`;
@@ -115,11 +116,18 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             const data = await response.json();
             console.log("Signup successful:", data);
-            setIsUpdated(true);
-            setSuccessMessage('Successfully signed up!');
-            setTimeout(() => {
-                onHide();
-            }, 1000); 
+            
+
+            if (agree) {
+                setIsUpdated(true);
+                setSuccessMessage('Successfully signed up!');
+                setTimeout(() => {
+                    onHide();
+                }, 1000); 
+            }
+            else {
+                setErrorMessage('You must agree to receive messages from Bible Bot each day.');
+            }
 
         } catch (error: unknown) {
             console.error(error);
@@ -205,6 +213,18 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                             <option key={index} value={book}>{book}</option>
                         ))}
                     </select>
+                </div>
+                <div className="d-flex align-items-center justify-content-center">
+                    <Form.Check
+                        type="checkbox"
+                        className="checkbox-container"
+                        id="agree"
+                        label=""
+                        required
+                    />
+                    <p style={{marginBottom: '0px'}}> I agree to receive messages from Bible Bot each day. 
+                        Data rates may apply, reply STOP to opt out. 
+                    </p>
                 </div>
                 <button 
                     className="mt-4 px-4 py-2 bg-primary text-white col-12" 

@@ -7,7 +7,10 @@ import Login from './login';
 
 
 it("updates the url", () => {
-    render(<Login phone="1234567890" />);
+    render(<Login 
+        phone="1234567890" 
+        onHide={() => {}}
+    />);
     let url = 'https://bible-api.com/data/web/random';
     
     const newTestamentCheckbox = screen.getByTestId('new testament only');

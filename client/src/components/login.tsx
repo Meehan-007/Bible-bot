@@ -26,7 +26,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
-        
+
         if (targetId === "total") {
             // Toggle wholeBible
             if (wholeBible) {
@@ -47,9 +47,9 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                 setUrl('https://bible-api.com/data/web/random/OT');
                 setOT(true);
                 setWholeBible(false);
-               setNT(false);
-    
-     }
+                setNT(false);
+
+            }
         } else if (targetId === "NT") {
             // Toggle NT
             if (NT) {
@@ -62,15 +62,15 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                 setOT(false);
             }
         }
-    
-    }    
-       
-            
+
+    }
+
+
 
 
     const update = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setErrorMessage(''); 
+        setErrorMessage('');
         setSuccessMessage('');
         console.log(wholeBible, OT, NT)
         if (!wholeBible && !OT && !NT) {
@@ -86,8 +86,8 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
         }
         try {
-            
-           
+
+
 
             const response = await fetch(`${baseUrl}/login`, {
                 method: 'PUT',
@@ -99,10 +99,10 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             if (!response.ok) {
                 const errorData = await response.json(); //
-                const errorMessage = errorData && typeof errorData.error === 'string' 
-                    ? errorData.error 
+                const errorMessage = errorData && typeof errorData.error === 'string'
+                    ? errorData.error
                     : 'login failed. Please try again.';
-                setErrorMessage(errorMessage); 
+                setErrorMessage(errorMessage);
                 throw new Error(`Login failed: ${response.status} - ${errorData?.message || response.statusText}`);
             }
 
@@ -110,9 +110,9 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
             console.log("data", data);
             setSuccessMessage('Successfully updated!');
             setIsUpdated(true);
-            
+
             setTimeout(() => {
-                
+
                 onHide();
             }, 500); // 2 second delay
 
@@ -140,12 +140,12 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             const data = await response.json();
             console.log("data", data);
-            setIsUpdated(true); 
+            setIsUpdated(true);
             setSuccessMessage('Successfully unsubscribed!');
-            setTimeout(() => {  
+            setTimeout(() => {
                 onHide();
-            }, 1000); 
-             
+            }, 1000);
+
 
         } catch (error) {
             console.error(error);
@@ -157,15 +157,15 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
             <Form onSubmit={update} className="d-flex flex-column gap-3">
                 <h1 className="text-center mb-4">Login</h1>
                 {successMessage && (
-                <Alert variant="success" className="text-center">
-                    {successMessage}
-                </Alert>
-            )}
-            {errorMessage && (
-                <Alert variant="danger" className="text-center">
-                    {errorMessage}
-                </Alert>
-            )}
+                    <Alert variant="success" className="text-center">
+                        {successMessage}
+                    </Alert>
+                )}
+                {errorMessage && (
+                    <Alert variant="danger" className="text-center">
+                        {errorMessage}
+                    </Alert>
+                )}
                 <div className="row">
                     <div className="col-12 mx-auto">
                         <Form.Group className="">
@@ -213,8 +213,8 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                             </div>
                         </Form.Group>
                         <div className="d-flex align-items-center justify-content-center">
-                    <hr className=" my-4 col-4"/> <p className='mx-2 text-center' style={{marginBottom: 0}}> Or </p> <hr className=" my-4 col-4"/>
-                </div>
+                            <hr className=" my-4 col-4" /> <p className='mx-2 text-center' style={{ marginBottom: 0 }}> Or </p> <hr className=" my-4 col-4" />
+                        </div>
                         <div className="my-1 mb-4">
                             <label htmlFor="books" className="d-block mb-2">Select a Book:</label>
                             <select
@@ -234,11 +234,11 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                                 unsubscribe
                             </button>
                             {!isUpdated && (
-                                <button 
-                                    className="px-4 py-2 bg-primary text-white col-12" 
+                                <button
+                                    className="px-4 py-2 bg-primary text-white col-12"
                                     type="submit"
-                                > 
-                                    update 
+                                >
+                                    update
                                 </button>
                             )}
                         </div>
