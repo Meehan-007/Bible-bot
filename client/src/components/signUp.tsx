@@ -79,8 +79,8 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
         
         try {
             // Log the URL we're trying to use
-            console.log("Base URL:", );
-            console.log("Full signup URL:", `/signup`);
+            
+            
 
             if (!wholeBible && !OT && !NT) {
                 altUrl = `/api/random/${book}`;
@@ -101,7 +101,7 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             }
 
-            const response = await fetch(`$/signup`, {
+            const response = await fetch(`signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

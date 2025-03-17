@@ -90,7 +90,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
 
 
-            const response = await fetch(`/login`, {
+            const response = await fetch(`login`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const deleting = async () => {
         setSuccessMessage('');
         try {
-            const response = await fetch(`/login`, {
+            const response = await fetch(`login`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
