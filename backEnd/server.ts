@@ -18,10 +18,12 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const apiKey = process.env.TWILIO_API_KEY;
-const apiSecret = process.env.TWILIO_API_SECRET;
+const accountSid = process.env.VITE_TWILIO_ACCOUNT_SID;
+const authToken = process.env.VITE_TWILIO_AUTH_TOKEN;
+const apiKey = process.env.VITE_TWILIO_API_KEY;
+const apiSecret = process.env.VITE_TWILIO_API_SECRET;
+const mongoUri = process.env.VITE_MONGODB_URI;
+const port = process.env.PORT || 3001;
 
 const client = twilio(apiKey, apiSecret, { accountSid });
 
@@ -31,9 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
  //app.use("/api", api);
-const port = process.env.PORT || 3001;
 
-const mongoUri = process.env.MONGODB_URI;
 console.log('mongoUri', mongoUri);
 if (!mongoUri) {
     throw new Error("MONGODB_URI environment variable is not defined");
@@ -48,12 +48,12 @@ mongoose.connect(mongoUri)
     .catch(err => {
         console.log(err);
     });
+    if (process.env.NODE_ENV === 'production') {
+        app.use(express.static('../client/dist'));
+      }
+    
 
-    app.use(express.static(path.join(__dirname, "../client/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-}); 
+ 
 
 // Run at 5 PM every day
 let cronScheduleExpression = '0 8 * * *';

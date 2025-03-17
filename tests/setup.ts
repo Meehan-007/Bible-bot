@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 
 beforeAll(async () => {
-    const mongoUri = process.env.MONGODB_URI;
+    const mongoUri = process.env.VITE_MONGODB_URI;
     if (!mongoUri) {
         throw new Error('MONGODB_URI must be defined');
     }

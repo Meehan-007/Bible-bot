@@ -26,10 +26,9 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-
-    const baseUrl = process.env.NODE_ENV === 'production'
-    ? 'process.env.BIBLE_API_URL'
-    : 'http://localhost:3001/api';
+    const baseUrl = import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_API_URL
+    : 'http://localhost:3001';
     
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
