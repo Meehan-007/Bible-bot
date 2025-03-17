@@ -75,7 +75,12 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
         setSuccessMessage('');
         const form = event.target as HTMLFormElement;
         const agree = form.agree.checked;
+        
         try {
+            // Log the URL we're trying to use
+            console.log("Base URL:", baseUrl);
+            console.log("Full signup URL:", `${baseUrl}/signup`);
+
             if (!wholeBible && !OT && !NT) {
                 altUrl = `${baseUrl}/api/random/${book}`;
                 console.log("URL!", altUrl);
@@ -95,8 +100,6 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             }
 
-            
-
             const response = await fetch(`${baseUrl}/signup`, {
                 method: 'POST',
                 headers: {
@@ -104,6 +107,8 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                 },
                 body: JSON.stringify({ phone, url }),
             });
+
+            console.log('Signup Response:', response);
 
             if (!response.ok) {
                 const errorData = await response.json();

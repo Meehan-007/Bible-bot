@@ -131,50 +131,31 @@ interface MongooseError extends Error {
 // HTTP POST route for signup (separate from cron job)
 app.post('/signup', async (req, res) => {
     try {
-        console.log('Signup request:', req.body);
-        let recipient = req.body.phone;
-        const url = req.body.url;
-        const fullMessage = req.body.message;
-        
-        // Validate phone number format
+        let { phone, url } = req.body;
+        console.log('Phone:', phone);
         const phoneRegex = /^\d{10}$/;  // Exactly 10 digits
-        if (!phoneRegex.test(recipient)) {
+        if (!phoneRegex.test(phone)) {  // Test original phone number
             return res.status(400).json({ 
                 error: "Invalid phone number. Please enter exactly 10 digits."
             });
         }
 
-        recipient = `+1${recipient}`
-        
-        
-        if (!recipient) {
-            return res.status(400).json({ error: "Phone number is required" });
-        }
-         
-          
-          
+        phone = `+1${phone}`; // Add +1 AFTER validation
 
-        const user = await User.create({ phone: recipient, url: url, fullMessage: fullMessage });
-        console.log('User SAVED successfully:', user);
-        res.status(200).json({ 
-            message: 'User saved successfully', 
-            user: {  // User data is nested under 'user'
-                phone: recipient,
-                url: url,
-                // ...
-            }
-        });
-
-    } catch (err: any) {  // Use `any` instead of `unknown` for easier error handling
-        console.error("Error saving user:", err);
-
-        // Check if it's a duplicate key error
-        if (err.code === 11000 || err.code === 11001) { 
-            console.log("Duplicate key error:", err);
+        // Check for existing user first
+        const existingUser = await User.findOne({ phone });
+        console.log('Existing user:', existingUser);
+        if (existingUser) {
             return res.status(409).json({ error: 'This phone number is already signed up.' });
         }
-            return res.status(500).json({ error: 'Failed to save user', details: err.message });
+
+        const user = new User({ phone, url });
+        await user.save();
         
+        res.status(200).json({ message: 'User created successfully', user });
+    } catch (err: any) {
+        console.error("Error saving user:", err);
+        res.status(500).json({ error: 'Failed to save user', details: err.message });
     }
 });
 

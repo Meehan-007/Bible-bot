@@ -13,18 +13,22 @@ describe('Server create user', () => {
     });
 });
 
-describe('will not let a duplicate user be created',() => {
-    it('should not let a duplicate user be created' , async () => {
-        const response = await request(app).post('/signup').send({
+describe('will not let a duplicate user be created', () => {
+    it('should not let a duplicate user be created', async () => {
+        // First signup
+        await request(app).post('/signup').send({
             phone: '1234569899',
             url: 'http://localhost:3001/api/random/exodus',
             message: ''
-        }); 
+        });
+
+        // Try duplicate signup
         const newResponse = await request(app).post('/signup').send({
             phone: '1234569899',
             url: 'http://localhost:3001/api/random/exodus',
             message: ''
-        })
+        });
+
         expect(newResponse.status).toBe(409);
     });
 });

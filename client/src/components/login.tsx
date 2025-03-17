@@ -97,7 +97,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                 body: JSON.stringify({ url, phone }),
             })
 
-            if (!response.ok) {
+            if (!response.ok) { console.log('Response: 2', fail);
                 const errorData = await response.json(); //
                 const errorMessage = errorData && typeof errorData.error === 'string'
                     ? errorData.error
