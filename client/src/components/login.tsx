@@ -22,7 +22,10 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const [isUpdated, setIsUpdated] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-    const baseUrl = process.env.BIBLE_API_URL || 'http://localhost:3001';
+
+    const baseUrl = process.env.NODE_ENV === 'production'
+    ? 'process.env.BIBLE_API_URL'
+    : 'http://localhost:3001/api';
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const targetId = event.target.id;
