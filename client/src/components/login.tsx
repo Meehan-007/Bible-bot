@@ -23,7 +23,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    const baseUrl = import.meta.env.MODE === 'production'
+    const VITE_API_URL = import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_API_URL
     : 'http://localhost:3001';
 
@@ -77,7 +77,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
         setSuccessMessage('');
         console.log(wholeBible, OT, NT)
         if (!wholeBible && !OT && !NT) {
-            const newUrl = `${baseUrl}/api/random/${book}`;
+            const newUrl = `${VITE_API_URL}/api/random/${book}`;
             url = newUrl;
             const response = await fetch(url);
             console.log('Response: 1', response);
@@ -92,7 +92,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
 
 
-            const response = await fetch(`${baseUrl}/login`, {
+            const response = await fetch(`${VITE_API_URL}/login`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const deleting = async () => {
         setSuccessMessage('');
         try {
-            const response = await fetch(`${baseUrl}/login`, {
+            const response = await fetch(`${VITE_API_URL}/login`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -26,7 +26,7 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    const baseUrl = import.meta.env.MODE === 'production'
+    const VITE_API_URL = import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_API_URL
     : 'http://localhost:3001';
     
@@ -81,11 +81,11 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
         
         try {
             // Log the URL we're trying to use
-            console.log("Base URL:", baseUrl);
-            console.log("Full signup URL:", `${baseUrl}/signup`);
+            console.log("Base URL:", VITE_API_URL);
+            console.log("Full signup URL:", `${VITE_API_URL}/signup`);
 
             if (!wholeBible && !OT && !NT) {
-                altUrl = `${baseUrl}/api/random/${book}`;
+                altUrl = `${VITE_API_URL}/api/random/${book}`;
                 console.log("URL!", altUrl);
                 url = altUrl;
                 const response = await fetch(url);
@@ -103,7 +103,7 @@ const SignUp = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
 
             }
 
-            const response = await fetch(`${baseUrl}/signup`, {
+            const response = await fetch(`${VITE_API_URL}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
