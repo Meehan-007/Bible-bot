@@ -231,17 +231,18 @@ const Login = ({ phone, onHide }: { phone: string; onHide: () => void }) => {
                         </div>
 
                         <div className="d-grid gap-2">
-                            <button className="btn btn-danger mt-2" type="button" onClick={deleting}>
-                                unsubscribe
-                            </button>
-                            {!isUpdated && (
+                            
+                           
                                 <button
-                                    className="px-4 py-2 bg-primary text-white col-12"
+                                    className="px-4 btn-primary btn py-2 text-white col-12 mt2"
                                     type="submit"
                                 >
                                     update
                                 </button>
-                            )}
+                            
+                            <button className="btn btn-danger mt-2" type="button" onClick={deleting}>
+                                unsubscribe
+                            </button>
                         </div>
                     </div>
                 </div>

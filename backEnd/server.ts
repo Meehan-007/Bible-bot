@@ -7,8 +7,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import cron from 'node-cron';
-import {User} from './models/user'
-import router from './api/bibleVerse'; 
+import { User } from './models/user'
+import router from './api/bibleVerse';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -20,19 +20,18 @@ const __dirname = dirname(__filename);
 
 const accountSid = process.env.VITE_TWILIO_ACCOUNT_SID;
 const authToken = process.env.VITE_TWILIO_AUTH_TOKEN;
-const apiKey = process.env.VITE_TWILIO_API_KEY;
-const apiSecret = process.env.VITE_TWILIO_API_SECRET;
+
 const mongoUri = process.env.VITE_MONGODB_URI;
 const port = process.env.PORT || 3001;
 
-const client = twilio(apiKey, apiSecret, { accountSid });
+const client = twilio(accountSid, authToken);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
- //app.use("/api", api);
+//app.use("/api", api);
 
 console.log('mongoUri', mongoUri);
 if (!mongoUri) {
@@ -48,12 +47,12 @@ mongoose.connect(mongoUri)
     .catch(err => {
         console.log(err);
     });
-    if (process.env.NODE_ENV === 'production') {
-        app.use(express.static('../client/dist'));
-      }
-    
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../client/dist'));
+}
 
- 
+
+
 
 // Run at 5 PM every day
 let cronScheduleExpression = '0 8 * * *';
@@ -62,16 +61,16 @@ cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
 
     try {
-         
+
         const users = await User.find({}); // Get all users from the database
         console.log('Users:', users);
         const messagePromises = users.map(async (user) => {
-            
+
             const recipient = user.phone;
             const url = user.url;
             let fullMessage = '';
             let Message = '';
-            
+
 
             try {
                 const response = await fetch(url);
@@ -80,32 +79,32 @@ cron.schedule(cronScheduleExpression, async function () {
                 }
                 const data = await response.json();
                 console.log('Data:', data);
-              
-                if (!data.final){
+
+                if (!data.final) {
                     const textmessage = data.random_verse.text;
-        const verse = data.random_verse.verse;
-        const chapter = data.random_verse.chapter;
-        const book = data.random_verse.book;
-        fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
-        console.log('Message:', fullMessage);
+                    const verse = data.random_verse.verse;
+                    const chapter = data.random_verse.chapter;
+                    const book = data.random_verse.book;
+                    fullMessage = `${textmessage} ${book} ${chapter}:${verse}`;
+                    console.log('Message:', fullMessage);
 
                 }
                 else {
-                     Message = data.final.map((item: { value: string }) => item.value).join(' ');
-                    console.log('Message:', Message); 
+                    Message = data.final.map((item: { value: string }) => item.value).join(' ');
+                    console.log('Message:', Message);
                 }
-                
-            
+
+
 
                 const message = await client.messages.create({
                     body: fullMessage || Message,
                     from: '+18667943172',
                     to: recipient
                 })
-                
+
                 return { recipient, success: true, sid: message.sid }
-              
-                
+
+
 
             } catch (innerError: unknown) {
                 if (innerError instanceof Error) {
@@ -117,7 +116,7 @@ cron.schedule(cronScheduleExpression, async function () {
                 }
             }
         })
-       
+
 
     } catch (error) {
         console.error("Error in cron job:", error);
@@ -126,7 +125,7 @@ cron.schedule(cronScheduleExpression, async function () {
 
 interface MongooseError extends Error {
     code?: number; // Optional code property
-} 
+}
 
 // HTTP POST route for signup (separate from cron job)
 app.post('/signup', async (req, res) => {
@@ -135,7 +134,7 @@ app.post('/signup', async (req, res) => {
         console.log('Phone:', phone);
         const phoneRegex = /^\d{10}$/;  // Exactly 10 digits
         if (!phoneRegex.test(phone)) {  // Test original phone number
-            return res.status(400).json({ 
+            return res.status(400).json({
                 error: "Invalid phone number. Please enter exactly 10 digits."
             });
         }
@@ -151,7 +150,7 @@ app.post('/signup', async (req, res) => {
 
         const user = new User({ phone, url });
         await user.save();
-        
+
         res.status(200).json({ message: 'User created successfully', user });
     } catch (err: any) {
         console.error("Error saving user:", err);
@@ -165,24 +164,30 @@ app.post('/signup', async (req, res) => {
 app.put('/login', async (req, res) => {
     try {
         console.log('Login request: for the put', req.body);
-        let { phone, url, fullMessage } = req.body; 
+        let phone = req.body.phone;
+        let url = req.body.url;
         console.log('URL', url);
-        phone = `+1${phone}`
+        phone = `+1${phone}`;
 
-        const user = await User.findOneAndUpdate({ phone });
-        if (!user) {
+        if (!phone || !url) {
+            return res.status(400).json({ error: 'Phone and selection are required' });
+        }
+
+        // Correctly structured findOneAndUpdate with 3 parameters
+        const updatedUser = await User.findOneAndUpdate(
+            {phone}, 
+            {$set: {url}}, 
+            {new: true, runValidators: true}
+        );
+        
+        if (!updatedUser) {
             return res.status(404).json({ error: 'User not found' });
         }
-        console.log('User found:', user.url);
-        user.url = url;
-        user.fullMessage = fullMessage;
-        await user.save();
-
-        console.log('User updated successfully:', user);
-        res.status(200).json({ message: 'User updated successfully', user });
+        console.log('User updated successfully:', updatedUser);
+        res.status(200).json({ message: 'User updated successfully', user: updatedUser });
     } catch (err: unknown) {
         console.error('Error updating user:', err);
-        
+
         // Check if err is an instance of Error
         if (err instanceof Error) {
             res.status(500).json({ error: 'Failed to update user', details: err.message });
@@ -192,23 +197,24 @@ app.put('/login', async (req, res) => {
         }
     }
 })
+
 app.delete('/login', async (req, res) => {
     try {
         console.log('delete:', req.body);
         let { phone } = req.body;
         console.log('Phone:', phone);
         phone = `+1${phone}`
-    
+
         console.log('Phone2:', phone);
-       const deletedUser = await User.findOneAndDelete({ phone})
+        const deletedUser = await User.findOneAndDelete({ phone })
         if (!deletedUser) {
-            res.status(404).json({ message: 'No user found'});
+            res.status(404).json({ message: 'No user found' });
             return;
         }
         res.json(deletedUser);
     } catch (err: unknown) {
         console.error('Error deleting user:', err);
-        
+
         // Check if err is an instance of Error
         if (err instanceof Error) {
             res.status(500).json({ error: 'Failed to delete user', details: err.message });
@@ -218,9 +224,9 @@ app.delete('/login', async (req, res) => {
         }
     }
 })
-  if (process.env.NODE_ENV !== 'test') {
-        app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
-        });
-    }
-    export default app;
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+}
+export default app;

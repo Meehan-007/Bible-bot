@@ -29,7 +29,7 @@ const userSchema = new Schema({
 
 const User = model('User', userSchema);
 
-userSchema.post('save', function(error: any, doc: any, next: any) {
+userSchema.post('save', function (error: any, doc: any, next: any) {
     if (error.name === 'MongoServerError' && error.code === 11000) {
         next(new Error('Phone number already exists'));
     } else {
