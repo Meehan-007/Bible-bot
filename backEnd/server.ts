@@ -76,13 +76,14 @@ cron.schedule(cronScheduleExpression, async function () {
             // Fix relative URLs by making them absolute
             if (url.startsWith('/')) {
                 console.log('Relative URL detected');
-                // For local development
-                url = `http://localhost:3001${url}`;
                 
-                // For production
+                // The issue is here - conditionally set URL based on environment
                 if (process.env.NODE_ENV === 'production') {
                     console.log('Production environment detected');
                     url = `https://bible-bot.org${url}`;
+                } else {
+                    // Only set local URL if NOT in production
+                    url = `http://localhost:3001${url}`;
                 }
             }
 
