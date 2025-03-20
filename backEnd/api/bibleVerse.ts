@@ -20,21 +20,23 @@ const possiblePaths = [
 
 router.get("/random/:book", async (req, res) => {
     try {
-        const book = req.params.book;
+        const book = req.params.book.toLowerCase();
         console.log("book name", book);
         if (!book) {
             return res.status(400).json({ error: "Book parameter is required" });
         }
         
-        // Try each possible path until we find the file
+        // Try each possible path and filename variation
         let filePath = '';
         let fileContent = null;
         
         for (const basePath of possiblePaths) {
             const testPath = path.join(basePath, `${book}.json`);
+            console.log("testPath", testPath);
             try {
                 if (fs.existsSync(testPath)) {
                     filePath = testPath;
+                    console.log("filePath", filePath);
                     break;
                 }
             } catch (err) {
