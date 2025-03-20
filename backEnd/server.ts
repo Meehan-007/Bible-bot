@@ -55,7 +55,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 
-let cronScheduleExpression = '0 9 * * *';
+let cronScheduleExpression = '*/5 * * * *';
 
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
@@ -75,11 +75,13 @@ cron.schedule(cronScheduleExpression, async function () {
 
             // Fix relative URLs by making them absolute
             if (url.startsWith('/')) {
+                console.log('Relative URL detected');
                 // For local development
                 url = `http://localhost:3001${url}`;
                 
                 // For production
                 if (process.env.NODE_ENV === 'production') {
+                    console.log('Production environment detected');
                     url = `https://bible-bot.org${url}`;
                 }
             }
@@ -139,6 +141,8 @@ cron.schedule(cronScheduleExpression, async function () {
     } catch (error) {
         console.error("Error in cron job:", error);
     }
+}, {
+  timezone: "America/New_York"  // Change to your timezone
 });
 
 interface MongooseError extends Error {
