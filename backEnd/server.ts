@@ -55,7 +55,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 
-let cronScheduleExpression = '*/5 * * * *';
+let cronScheduleExpression = '0 8 * * *';
 
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
