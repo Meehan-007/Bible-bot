@@ -54,8 +54,8 @@ if (process.env.NODE_ENV === 'production') {
 
 
 
-// Change from running every 5 minutes to once a day at 8 AM
-let cronScheduleExpression = '0 8 * * *';
+
+let cronScheduleExpression = '0 9 * * *';
 
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
