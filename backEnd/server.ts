@@ -54,12 +54,16 @@ if (process.env.NODE_ENV === 'production') {
 
 
 
-// Run at 5 PM every day
+// Change from running every 5 minutes to once a day at 8 AM
 let cronScheduleExpression = '0 8 * * *';
 
 cron.schedule(cronScheduleExpression, async function () {
     console.log('Cron Job starting');
-
+    console.log('Twilio credentials:', {
+        accountSid: accountSid?.substring(0, 5) + '...',
+        authTokenLength: authToken?.length,
+        hasAuth: !!accountSid && !!authToken
+      });
     try {
 
         const users = await User.find({}); // Get all users from the database
@@ -67,11 +71,25 @@ cron.schedule(cronScheduleExpression, async function () {
         const messagePromises = users.map(async (user) => {
 
             const recipient = user.phone;
-            const url = user.url;
+            let url = user.url;
+
+            // Fix relative URLs by making them absolute
+            if (url.startsWith('/')) {
+                // For local development
+                url = `http://localhost:3001${url}`;
+                
+                // For production
+                if (process.env.NODE_ENV === 'production') {
+                    url = `https://bible-bot.org${url}`;
+                }
+            }
+
+            console.log('Using URL:', url);
+
             let fullMessage = '';
             let Message = '';
 
-
+            console.log('URL:', url);
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
